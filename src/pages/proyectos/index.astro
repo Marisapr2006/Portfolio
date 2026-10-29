@@ -1,5 +1,10 @@
 ---
+import { getCollection } from 'astro:content';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { sortProjects } from '../../data/projects';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const projects = sortProjects(await getCollection('projects'));
 ---
 
 <BaseLayout
@@ -17,34 +22,35 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </p>
       </div>
 
-      <div class="callout">
-        <h2 class="callout__title">En preparación</h2>
-        <p class="callout__text">
-          Estoy documentando los dos primeros casos: este portfolio y mi proyecto final de DAW. Se
-          publican en las próximas semanas.
-        </p>
-        <div class="actions callout__actions">
-          <a class="button button--secondary" href="/contacto/">
-            Hablamos
-          </a>
+      {projects.length > 0 ? (
+        <div class="project-list">
+          {projects.map((project, index) => (
+            <ProjectCard project={project} index={index} headingLevel="h2" />
+          ))}
         </div>
-      </div>
+      ) : (
+        <p class="page__lead">
+          Estoy documentando el primer caso. Se publica en las próximas semanas.
+        </p>
+      )}
+
+      {projects.length === 1 && (
+        <p class="project-list__note">
+          El segundo caso, mi proyecto final de DAW, está en preparación.
+        </p>
+      )}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .callout__title {
-    margin-bottom: var(--space-2);
-    font-size: var(--text-xl);
+  .project-list {
+    display: grid;
   }
 
-  .callout__text {
-    max-width: 60ch;
+  .project-list__note {
+    margin-top: var(--space-6);
     color: var(--color-text-muted);
-  }
-
-  .callout__actions {
-    margin-top: var(--space-5);
+    font-size: var(--text-sm);
   }
 </style>

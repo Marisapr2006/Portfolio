@@ -83,11 +83,27 @@ import { site } from '../data/site';
     padding-left: 0.06em;
   }
 
+  .hero__title-block {
+    animation: hero-in 600ms var(--ease-out) both;
+  }
+
   .hero__intro {
     display: grid;
     gap: var(--space-5);
     align-content: end;
     max-width: 34rem;
+    animation: hero-in 600ms var(--ease-out) 100ms both;
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .hero__lead {

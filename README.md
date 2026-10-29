@@ -62,10 +62,21 @@ tests/e2e/              Playwright + axe
 ## Contenido
 
 - Los datos personales y los enlaces viven en `src/data/site.ts`.
-- Los proyectos se añadirán como Markdown en `src/content/projects/` con las seis secciones
-  obligatorias: Contexto, El problema, Restricciones, Decisiones, Resultado y Qué haría después.
-- El CV publicado está en `public/cv/marisa-pena-rey-cv.pdf`. Se copia desde `docs/CV_Marisa.pdf`
-  cuando se actualice.
+- Los proyectos viven como Markdown en `src/content/projects/`. El esquema de
+  `src/content.config.ts` valida título, resumen, año, rol, estado, stack, portada y enlaces.
+- Cada caso debe incluir, en este orden, las secciones `## Contexto`, `## El problema`,
+  `## Restricciones`, `## Decisiones`, `## Resultado` y `## Qué haría después`.
+
+### Añadir un proyecto
+
+1. Crea `src/content/projects/<slug>.md` y añade el frontmatter que exige el esquema.
+2. Guarda la portada en `src/assets/projects/<slug>/cover.png` y referénciala con una ruta
+   relativa desde el Markdown.
+3. Escribe las seis secciones y ejecuta `npm run check:content`.
+4. Ejecuta `npm test` para comprobar rutas, enlaces, tema y accesibilidad.
+
+El CV publicado está en `public/cv/marisa-pena-rey-cv.pdf`. Se copia desde `docs/CV_Marisa.pdf`
+cuando se actualice.
 
 ## Despliegue
 

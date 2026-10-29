@@ -1,0 +1,188 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { projectStatusLabel } from '../data/projects';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  index: number;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { project, index, headingLevel = 'h3' } = Astro.props;
+const { title, summary, year, stack, cover, status } = project.data;
+const number = String(index + 1).padStart(2, '0');
+const Heading = headingLevel;
+---
+
+<article class="project-card">
+  <a class="project-card__link" href={`/proyectos/${project.id}/`}>
+    <span class="project-card__index" aria-hidden="true">
+      {number}
+    </span>
+
+    <div class="project-card__media">
+      <Image
+        src={cover}
+        alt=""
+        widths={[480, 800, 1200]}
+        sizes="(min-width: 900px) 44vw, 100vw"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="project-card__body">
+      <p class="project-card__meta">
+        <span>{year}</span>
+        <span aria-hidden="true">·</span>
+        <span>{projectStatusLabel(status)}</span>
+      </p>
+
+      <Heading class="project-card__title">{title}</Heading>
+      <p class="project-card__summary">{summary}</p>
+
+      <ul class="project-card__stack" aria-label={`Tecnologías de ${title}`}>
+        {stack.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+
+      <span class="project-card__cta" aria-hidden="true">
+        Ver caso
+        <span>→</span>
+      </span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .project-card {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .project-card:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .project-card__link {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--space-4) var(--space-3);
+    padding-block: var(--space-6);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .project-card__index {
+    grid-column: 1;
+    grid-row: 1;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+  }
+
+  .project-card__media {
+    grid-column: 2;
+    grid-row: 1;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .project-card__media img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  .project-card__link:hover .project-card__media img {
+    transform: scale(1.02);
+  }
+
+  .project-card__body {
+    display: grid;
+    grid-column: 2;
+    grid-row: 2;
+    gap: var(--space-3);
+    max-width: 60ch;
+  }
+
+  .project-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .project-card__title {
+    font-size: var(--text-2xl);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .project-card__link:hover .project-card__title {
+    color: var(--color-primary);
+  }
+
+  .project-card__summary {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .project-card__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .project-card__stack li:not(:last-child)::after {
+    content: '·';
+    margin-left: var(--space-2);
+    color: var(--color-border-strong);
+  }
+
+  .project-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-1);
+    color: var(--color-primary);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 900px) {
+    .project-card__link {
+      grid-template-columns: 2rem minmax(0, 0.95fr) minmax(0, 1.05fr);
+      gap: var(--space-5) var(--space-6);
+      align-items: start;
+    }
+
+    .project-card__media {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+
+    .project-card__body {
+      grid-column: 3;
+      grid-row: 1;
+      padding-top: var(--space-2);
+    }
+  }
+</style>

@@ -148,12 +148,16 @@ Notas de integración con el repo:
 │  │  ├─ Tag.astro
 │  │  ├─ CopyEmail.astro
 │  │  └─ ArrowLink.astro
+│  ├─ assets/
+│  │  └─ projects/              # portadas y galerías, optimizadas en build
 │  ├─ content/
 │  │  └─ projects/*.md          # un archivo por caso de estudio
 │  ├─ content.config.ts         # colección + esquema Zod
 │  ├─ data/
 │  │  ├─ site.ts                # nombre, rol, email, redes, ubicación, disponibilidad
-│  │  └─ stack.ts               # tecnologías agrupadas
+│  │  ├─ stack.ts               # tecnologías agrupadas
+│  │  ├─ projects.ts            # orden y etiquetas de estado
+│  │  └─ process.ts             # pasos de "Cómo trabajo"
 │  ├─ layouts/
 │  │  ├─ BaseLayout.astro
 │  │  └─ ProjectLayout.astro
@@ -176,7 +180,6 @@ Notas de integración con el repo:
 │  └─ e2e/
 │     ├─ pages.spec.ts
 │     ├─ theme.spec.ts
-│     ├─ navigation.spec.ts
 │     └─ a11y.spec.ts
 ├─ astro.config.mjs
 ├─ playwright.config.ts
@@ -401,7 +404,7 @@ Reglas de uso:
 - Texto largo: `max-width: 65ch`.
 - Escala de espacio: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128 px.
 - Radios: 2 px en etiquetas, 4 px en botones, 8 px en imágenes de caso. Nada de píldoras gigantes.
-- Grid de proyectos: 1 columna en móvil, 2 en ≥ 900 px.
+- Proyectos: lista editorial de una columna. Cada fila combina índice, portada y contenido; en ≥ 900 px se divide en tres columnas. Se evita la cuadrícula de tarjetas idénticas para que el caso único no quede huérfano.
 
 ### Movimiento
 
@@ -694,3 +697,14 @@ Decisiones tomadas al ejecutar la especificación:
 - CV copiado a `public/cv/marisa-pena-rey-cv.pdf` desde `docs/CV_Marisa.pdf`.
 - Suites E2E iniciales: rutas y 404, persistencia del tema, menú móvil y axe en cuatro páginas × dos temas.
 - Las páginas de Proyectos, Sobre mí y Contacto existen con contenido real mínimo para que la navegación no tenga enlaces muertos; se amplían en la Fase 2.
+
+### Fase 1 — Contenido y home (rama `feat/01-content-home`)
+
+- Content Collections con `glob` y esquema Zod completo: `title`, `summary`, `year`, `role`, `status`, `stack`, `cover`, `gallery`, enlaces, `featured`, `order` y `confidential`.
+- Primer caso publicado: `este-portfolio.md`, con portada propia y las seis secciones obligatorias.
+- Para no dejar enlaces muertos se implementan también `/proyectos/` y `/proyectos/[id]/` en esta fase: listado, portada, tabla de metadatos, cuerpo Markdown, galería condicional, aviso de confidencialidad y siguiente caso.
+- Home completa: trabajo seleccionado, cómo trabajo con artefacto real, stack agrupado y CTA de contacto.
+- La lista de proyectos usa filas editoriales en lugar de una cuadrícula de tarjetas; se actualiza la sección de layout para reflejarlo.
+- Se mantiene una nota visible para el segundo caso featured, pendiente de escribir.
+- Tests añadidos: caso de estudio con seis secciones, enlaces internos sin 404 y axe también en la página de detalle.
+- Pendiente para las fases 2 y 3: segundo caso, OG image, copy ampliado de Sobre mí y Contacto, botón de copiar email, CI y despliegue en Vercel.
