@@ -31,6 +31,15 @@ if (nav) {
       }
     });
 
+    // Keep keyboard focus out of the content hidden behind the fixed panel.
+    nav.addEventListener('focusout', (event) => {
+      const next = event.relatedTarget as Node | null;
+
+      if (next && !nav.contains(next)) {
+        setOpen(false);
+      }
+    });
+
     panel.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => setOpen(false));
     });
@@ -38,7 +47,12 @@ if (nav) {
     const desktop = window.matchMedia('(min-width: 768px)');
     desktop.addEventListener('change', (event) => {
       if (event.matches) {
+        const hadFocus = nav.contains(document.activeElement);
         setOpen(false);
+
+        if (hadFocus) {
+          toggle.focus();
+        }
       }
     });
   }

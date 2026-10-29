@@ -18,13 +18,14 @@ const year = new Date().getFullYear();
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </li>
       <li>
-        <a href={site.github}>GitHub</a>
+        <a href={site.github}>GitHub ↗</a>
       </li>
       <li>
-        <a href={site.linkedin}>LinkedIn</a>
+        <a href={site.linkedin}>LinkedIn ↗</a>
       </li>
     </ul>
 
+    <p class="site-footer__build">// construido con Astro, CSS y TypeScript</p>
     <p class="site-footer__copy">
       © {year} {site.name}
     </p>
@@ -33,24 +34,29 @@ const year = new Date().getFullYear();
 
 <style>
   .site-footer {
-    padding-block: var(--space-7);
+    padding-block: var(--space-6);
     border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
   }
 
   .site-footer__inner {
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-4);
   }
 
   .site-footer__name {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
+    font-family: var(--font-sans);
+    font-size: var(--text-lg);
+    font-weight: 650;
   }
 
   .site-footer__meta,
+  .site-footer__build,
   .site-footer__copy {
     color: var(--color-text-muted);
-    font-size: var(--text-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
   }
 
   .site-footer__links {
@@ -60,7 +66,13 @@ const year = new Date().getFullYear();
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: var(--text-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+  }
+
+  .site-footer__links a {
+    text-decoration-color: var(--color-border-strong);
   }
 
   @media (min-width: 768px) {
@@ -69,6 +81,7 @@ const year = new Date().getFullYear();
       align-items: end;
     }
 
+    .site-footer__build,
     .site-footer__copy {
       grid-column: 1 / -1;
     }

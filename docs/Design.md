@@ -123,3 +123,14 @@ Se comprobarán especialmente los botones, los enlaces, el texto secundario y lo
 El portfolio dispondrá de dos temas visuales coherentes, con una identidad violeta reconocible, una buena jerarquía visual y una implementación sencilla de mantener.
 
 La paleta se utilizará en todas las secciones de la web para asegurar la consistencia entre la página de inicio, la presentación personal, los proyectos, las tecnologías, el contacto y el panel de administración.
+
+## 10. Identidad técnica y tipografía
+
+La identidad visual se alinea con la idea de **dossier técnico**:
+
+- Titulares en `system-ui` con peso semibold y espaciado controlado; sin serif display.
+- Texto en `system-ui`; etiquetas, metadatos, números y bloques de código en `ui-monospace`.
+- No se cargan webfonts: el sistema ya ofrece suficientes pesos y se reduce la latencia.
+- Las secciones usan numeración mono y regla fina.
+- Los bloques de código y artefactos (`perfil.ts`, `spec.md`) usan superficies oscuras y tokens de sintaxis propios del tema.
+- Las capturas se presentan como ficha técnica con marco sutil y CTA visible.

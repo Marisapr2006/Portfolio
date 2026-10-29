@@ -30,7 +30,14 @@ test('el menú móvil se abre, cierra con Escape y devuelve el foco', async ({ p
 
   const mobileNav = page.getByRole('navigation', { name: 'Menú móvil' });
   await expect(mobileNav).toBeVisible();
-  await expect(mobileNav.getByRole('link', { name: 'Proyectos' })).toBeFocused();
+  const firstLink = mobileNav.getByRole('link', { name: 'Proyectos' });
+  await expect(firstLink).toBeFocused();
+
+  // Regression: moving forward through the panel must not drop focus behind it.
+  const secondLink = mobileNav.getByRole('link', { name: 'Sobre mí' });
+  await page.keyboard.press('Tab');
+  await expect(secondLink).toBeFocused();
+  await expect(mobileNav.getByRole('link', { name: 'Contacto' })).not.toBeFocused();
 
   await page.keyboard.press('Escape');
 

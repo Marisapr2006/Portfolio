@@ -37,7 +37,7 @@ Los proyectos se validan con Zod y un script que exige seis secciones. Un caso i
 
 ## Resultado
 
-El sitio se sirve como HTML estático y genera las imágenes en el build. El CSS pesa menos de 4 KB gzip y no se envía ningún framework de cliente. Las pruebas cubren rutas, 404, tema, menú móvil y accesibilidad en ambos temas. El despliegue está preparado para Vercel con previews por pull request.
+El sitio se sirve como HTML estático y genera las imágenes en el build. El CSS pesa menos de 4 KB gzip y no se envía ningún framework de cliente. Las pruebas cubren rutas, 404, tema, menú móvil y accesibilidad en ambos temas. El despliegue está preparado para Vercel con el dominio provisional; los previews por pull request se activarán cuando se conecte el repositorio.
 
 ## Qué haría después
 

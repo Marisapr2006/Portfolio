@@ -51,7 +51,7 @@ Blog, i18n, panel de administración, autenticación, base de datos, formulario 
 | Contenido | **Content Collections + Markdown** | `src/content.config.ts`, loader `glob()` |
 | Validación | **Zod 4** vía `astro/zod` | Esquema de proyectos |
 | JavaScript | **TypeScript mínimo + islas vanilla** | Sin React/Vue/Svelte |
-| Tipografía | **Instrument Serif** self-hosted (display) + `system-ui` (texto) + `ui-monospace` (etiquetas) | WOFF2, subset latin + latin-ext, una sola weight |
+| Tipografía | **Sistema sans** para texto y titulares + `ui-monospace` para etiquetas y código | Sin webfonts en v1; el sistema ya cubre pesos necesarios. |
 | Tests | **Playwright** + `@axe-core/playwright` | Chromium; viewport móvil y escritorio |
 | Calidad | **Prettier** + `prettier-plugin-astro`, `astro check` | Sin ESLint en v1 (poco JS) |
 | Despliegue | **Vercel** (Hobby, salida estática) | Cero configuración; uso personal no comercial |
@@ -127,7 +127,7 @@ Notas de integración con el repo:
 │  └─ workflows/ci.yml          # check + lint + build + E2E
 ├─ public/
 │  ├─ cv/marisa-pena-rey-cv.pdf # CV descargable, < 1 MB
-│  ├─ fonts/                    # Instrument Serif woff2 (latin + latin-ext)
+│  ├─ fonts/                    # Reservado para fuentes futuras (no se usa en la interfaz actual)
 │  ├─ favicon.svg
 │  ├─ og-default.png            # 1200×630
 │  └─ robots.txt
@@ -344,12 +344,12 @@ const { title, summary, year, stack, cover } = project.data;
 
 Señales de identidad:
 
-- Secciones numeradas (`01 — Trabajo seleccionado`).
-- Reglas finas y mucho aire; grilla editorial.
-- Titulares en serif; etiquetas en mono; texto en system-ui.
+- Secciones numeradas (`// 01 — Trabajo seleccionado`).
+- Reglas finas y aire amplio con grilla técnica.
+- Titulares en system-ui; etiquetas y bloques en mono; texto en system-ui.
 - Violeta reservado para interacción; cian para datos y enlaces.
-- Motivo sutil de plano técnico (líneas de 1 px al 4 % de opacidad) en cabeceras de sección.
-- Capturas grandes, sin marcos ni sombras pesadas.
+- Motivo sutil de rejilla o regla fina al 4 % de opacidad en cabeceras de sección.
+- Capturas con marco de ficha técnica y CTA visible.
 
 Prohibido: glassmorphism, degradados llamativos, emojis decorativos, iconos de relleno, animaciones de scroll pesadas, contadores falsos, carruseles.
 
@@ -357,7 +357,7 @@ Prohibido: glassmorphism, degradados llamativos, emojis decorativos, iconos de r
 
 | Rol | Fuente | Uso |
 |---|---|---|
-| Display | Instrument Serif 400 | `h1`, `h2`, cifras grandes |
+| Display | `system-ui, -apple-system, 'Segoe UI', sans-serif` (peso 650) | `h1`, `h2`, cifras grandes |
 | Texto | `system-ui, -apple-system, 'Segoe UI', sans-serif` | Párrafos, navegación, botones |
 | Mono | `ui-monospace, 'Cascadia Code', 'JetBrains Mono', monospace` | Etiquetas, metadatos, números de sección |
 
@@ -538,7 +538,7 @@ Presupuestos medidos en móvil, Lighthouse, build de producción:
 |---|---|
 | JS inicial | ≤ 20 KB gzip |
 | CSS | ≤ 25 KB gzip |
-| Fuentes | ≤ 60 KB total, 2 archivos máximo |
+| Fuentes | 0 KB en v1 (sistema + mono) |
 | LCP | < 2.0 s en 4G |
 | CLS | < 0.05 |
 | INP | < 200 ms |
@@ -550,7 +550,7 @@ Presupuestos medidos en móvil, Lighthouse, build de producción:
 Decisiones para cumplirlo:
 
 - Cero frameworks de cliente; solo islas vanilla para tema, menú y copiar email.
-- Fuente display precargada con `font-display: swap` y subset latin + latin-ext.
+- No hay webfonts: se usa `system-ui` y `ui-monospace`; la portada sigue siendo la única imagen pesada de contenido.
 - Imágenes en AVIF/WebP con `width`/`height`, `srcset` y `loading="lazy"` salvo la portada del caso.
 - CSS crítico en una sola hoja; sin librerías de iconos.
 - Sin scripts de terceros que bloqueen el render.
@@ -690,10 +690,10 @@ npm run test:e2e
 Decisiones tomadas al ejecutar la especificación:
 
 - Versiones fijadas: Astro **7.4.4**, `@astrojs/sitemap` **3.7.4**, TypeScript **6.0.3** (el peer de `@astrojs/check` admite `^5 || ^6`, no TS 7), Prettier **3.9.10**, Playwright **1.64.1** y axe **4.14.0**.
-- `trailingSlash: 'always'` se configura en `astro.config.mjs`; `vercel.json` lo replica y añade cabeceras de seguridad (`X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`) y cache inmutable para `/fonts/`.
+- `trailingSlash: 'always'` se configura en `astro.config.mjs`; `vercel.json` lo replica y añade cabeceras de seguridad (`X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`) y cache inmutable para estáticos.
 - URL canónica provisional: `https://marisapena.vercel.app`. Se actualizará en `astro.config.mjs` y `public/robots.txt` cuando se confirme el proyecto de Vercel o el dominio propio.
 - `docs/Arquitecture.md` queda marcado como documento histórico.
-- Fuente Instrument Serif self-hosted en `public/fonts/` (latin + latin-ext) con licencia OFL incluida.
+- Se descartan las fuentes web y se adopta la identidad técnica con `system-ui` y `ui-monospace`.
 - CV copiado a `public/cv/marisa-pena-rey-cv.pdf` desde `docs/CV_Marisa.pdf`.
 - Suites E2E iniciales: rutas y 404, persistencia del tema, menú móvil y axe en cuatro páginas × dos temas.
 - Las páginas de Proyectos, Sobre mí y Contacto existen con contenido real mínimo para que la navegación no tenga enlaces muertos; se amplían en la Fase 2.
@@ -708,3 +708,14 @@ Decisiones tomadas al ejecutar la especificación:
 - Se mantiene una nota visible para el segundo caso featured, pendiente de escribir.
 - Tests añadidos: caso de estudio con seis secciones, enlaces internos sin 404 y axe también en la página de detalle.
 - Pendiente para las fases 2 y 3: segundo caso, OG image, copy ampliado de Sobre mí y Contacto, botón de copiar email, CI y despliegue en Vercel.
+
+### Fase 2 — Identidad técnica y rediseño editorial a ficha técnica (rama `feat/02-technical-notebook`)
+
+- Se abandona la tipografía serif Instrument Serif y se adopta `system-ui` + `ui-monospace`; se eliminan los archivos de fuente y el preload.
+- Se actualiza la identidad visual a **technical notebook**: titulares sans, etiquetas mono, bloques de código, reglas finas y fichas de proyecto con CTA.
+- Se extraen `ProfileCard`, `StackGrid`, `ProcessGrid`, `CopyEmail`; se usa `DossierMeta` con `confidential`.
+- Se corrige el foco del menú móvil con manejo de `focusout` y se añade regresión.
+- Se añade validación de contenido al `prebuild`; el validador pasa a soporte recursivo y el loader usa `**/*.md`.
+- Se corrige la afirmación de previews de Vercel hasta que el repositorio esté conectado.
+- Se actualiza la accesibilidad: contraste de navegación y nombre accesible de tarjetas con CTA visible.
+- Se añade test de copia de email y navegación del índice del caso.

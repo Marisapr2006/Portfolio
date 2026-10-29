@@ -2,53 +2,110 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import DossierMeta from '../components/DossierMeta.astro';
+import Tag from '../components/Tag.astro';
 import BaseLayout from './BaseLayout.astro';
+
+interface ProjectHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
 
 interface Props {
   project: CollectionEntry<'projects'>;
   next?: CollectionEntry<'projects'> | null;
+  headings?: ProjectHeading[];
 }
 
-const { project, next } = Astro.props;
-const { title, summary, cover, year, gallery, confidential } = project.data;
+const { project, next, headings = [] } = Astro.props;
+const { title, summary, cover, year, gallery, confidential, stack } = project.data;
+const sections = headings.filter((heading) => heading.depth === 2);
 ---
 
 <BaseLayout title={title} description={summary} ogType="article">
   <article class="project">
     <header class="project__header">
       <div class="container project__header-inner">
-        <a class="project__back" href="/proyectos/">
-          ← Todos los proyectos
-        </a>
-        <p class="page__eyebrow">{year} — Caso de estudio</p>
-        <h1 class="project__title">{title}</h1>
-        <p class="page__lead">{summary}</p>
+        <nav class="project__breadcrumb" aria-label="Migas de pan">
+          <a href="/proyectos/">proyectos</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{project.id}</span>
+        </nav>
+
+        <div class="project__intro">
+          <div class="project__headline">
+            <p class="mono-label project__eyebrow">
+              // caso {year} · {project.id}
+            </p>
+            <h1 class="project__title">{title}</h1>
+            <p class="page__lead">{summary}</p>
+            <ul class="project__stack" aria-label={`Tecnologías de ${title}`}>
+              {stack.map((item) => (
+                <li>
+                  <Tag>{item}</Tag>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="project__meta">
+            <p class="mono-label project__meta-label">// ficha</p>
+            <DossierMeta project={project} confidential={confidential} />
+          </div>
+        </div>
       </div>
     </header>
 
     <div class="container project__cover-wrap">
-      <Image
-        class="project__cover"
-        src={cover}
-        alt={`Captura de la página de inicio de ${title}`}
-        widths={[720, 1080, 1440]}
-        sizes="(min-width: 1200px) 1200px, 100vw"
-        loading="eager"
-        fetchpriority="high"
-      />
+      <figure class="project__cover-frame">
+        <div class="project__cover-bar" aria-hidden="true">
+          <span class="project__cover-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="project__cover-file">captura / {project.id}</span>
+        </div>
+        <Image
+          class="project__cover"
+          src={cover}
+          alt={`Captura de la página de inicio de ${title}`}
+          widths={[720, 1080, 1440]}
+          sizes="(min-width: 1200px) 1072px, calc(100vw - 8rem)"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <figcaption class="project__cover-caption">Portada del caso</figcaption>
+      </figure>
     </div>
 
-    <div class="container">
-      <DossierMeta project={project} />
-      {confidential && (
-        <p class="project__notice">
-          Proyecto confidencial: el cliente no se nombra y no se publican enlaces privados.
-        </p>
+    <div class="container project__body">
+      {sections.length > 0 && (
+        <aside class="project__toc">
+          <p class="mono-label project__toc-title">// en este caso</p>
+          <nav aria-label="Contenido del caso">
+            <ol>
+              {sections.map((heading) => (
+                <li>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </aside>
       )}
-    </div>
 
-    <div class="container project__content prose">
-      <slot />
+      <div class="project__content">
+        {confidential && (
+          <p class="project__notice">
+            Proyecto confidencial: el cliente no se nombra y no se publican enlaces privados.
+          </p>
+        )}
+
+        <div class="prose">
+          <slot />
+        </div>
+      </div>
     </div>
 
     {gallery.length > 0 && (
@@ -59,7 +116,7 @@ const { title, summary, cover, year, gallery, confidential } = project.data;
             src={image}
             alt={`Captura ${index + 1} de ${title}`}
             widths={[600, 1000]}
-            sizes="(min-width: 900px) 50vw, 100vw"
+            sizes="(min-width: 1200px) 528px, (min-width: 900px) 50vw, 100vw"
             loading="lazy"
           />
         ))}
@@ -68,9 +125,9 @@ const { title, summary, cover, year, gallery, confidential } = project.data;
 
     {next && (
       <nav class="container project__next" aria-label="Siguiente proyecto">
-        <p class="page__eyebrow">Siguiente caso</p>
+        <p class="mono-label">// siguiente caso</p>
         <a class="project__next-link" href={`/proyectos/${next.id}/`}>
-          {next.data.title}
+          <span>{next.data.title}</span>
           <span aria-hidden="true">→</span>
         </a>
       </nav>
@@ -80,69 +137,196 @@ const { title, summary, cover, year, gallery, confidential } = project.data;
 
 <style>
   .project__header {
-    padding-block: clamp(2.5rem, 6vw, 4.5rem) var(--space-6);
+    padding-block: clamp(2rem, 5vw, 3.5rem) var(--space-6);
     border-bottom: 1px solid var(--color-border);
   }
 
-  .project__header-inner {
-    display: grid;
-    gap: var(--space-4);
-    max-width: 56rem;
-    margin-inline: auto;
-  }
-
-  .project__back {
-    justify-self: start;
+  .project__breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
     color: var(--color-text-muted);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .project__breadcrumb a {
+    color: var(--color-text-muted);
+    text-decoration-color: var(--color-border-strong);
+  }
+
+  .project__breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .project__intro {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .project__headline {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .project__eyebrow {
+    color: var(--color-primary);
   }
 
   .project__title {
     font-size: var(--text-3xl);
+    max-width: 16ch;
+  }
+
+  .project__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project__meta {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .project__meta-label {
+    color: var(--color-primary);
   }
 
   .project__cover-wrap {
     padding-top: var(--space-6);
   }
 
+  .project__cover-frame {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .project__cover-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 2.25rem;
+    padding-inline: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface-raised);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+  }
+
+  .project__cover-dots {
+    display: inline-flex;
+    gap: 0.3rem;
+  }
+
+  .project__cover-dots span {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--color-border-strong);
+  }
+
+  .project__cover-dots span:first-child {
+    background: var(--color-primary);
+  }
+
+  .project__cover-dots span:nth-child(2) {
+    background: var(--color-accent);
+  }
+
+  .project__cover-file {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .project__cover {
     width: 100%;
+  }
+
+  .project__cover-caption {
+    padding: var(--space-2) var(--space-3);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .project__body {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--space-7) var(--space-8);
+  }
+
+  .project__toc {
+    align-self: start;
+    padding: var(--space-4);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background: var(--color-surface);
   }
 
+  .project__toc-title {
+    margin-bottom: var(--space-3);
+    color: var(--color-primary);
+  }
+
+  .project__toc ol {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: toc;
+  }
+
+  .project__toc li {
+    counter-increment: toc;
+  }
+
+  .project__toc a {
+    display: flex;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .project__toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    color: var(--color-border-strong);
+  }
+
+  .project__toc a:hover {
+    color: var(--color-primary);
+  }
+
   .project__content {
-    padding-block: var(--space-7) var(--space-8);
-  }
-
-  .project__content :global(h2) {
-    margin-top: var(--space-8);
-    font-size: var(--text-2xl);
-  }
-
-  .project__content :global(h2:first-child) {
-    margin-top: 0;
-  }
-
-  .project__content :global(p),
-  .project__content :global(li) {
-    max-width: var(--measure);
-  }
-
-  .project__content :global(ul),
-  .project__content :global(ol) {
-    padding-left: var(--space-5);
+    min-width: 0;
   }
 
   .project__notice {
-    margin-top: var(--space-5);
+    margin-bottom: var(--space-5);
     padding: var(--space-4);
-    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-left: 2px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
     font-size: var(--text-sm);
   }
 
@@ -158,12 +342,6 @@ const { title, summary, cover, year, gallery, confidential } = project.data;
     border-radius: var(--radius-lg);
   }
 
-  @media (min-width: 900px) {
-    .project__gallery {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
   .project__next {
     display: grid;
     gap: var(--space-2);
@@ -177,12 +355,51 @@ const { title, summary, cover, year, gallery, confidential } = project.data;
     gap: var(--space-3);
     justify-self: start;
     color: var(--color-text);
-    font-family: var(--font-display);
     font-size: var(--text-xl);
+    font-weight: 650;
     text-decoration: none;
   }
 
   .project__next-link:hover {
     color: var(--color-primary);
+  }
+
+  @media (min-width: 600px) {
+    .project__toc ol {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .project__gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .project__intro {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      gap: var(--space-7);
+    }
+
+    .project__meta {
+      position: sticky;
+      top: calc(var(--header-height) + var(--space-5));
+    }
+
+    .project__body {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: var(--space-7);
+      align-items: start;
+    }
+
+    .project__toc {
+      position: sticky;
+      top: calc(var(--header-height) + var(--space-5));
+    }
+
+    .project__toc ol {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

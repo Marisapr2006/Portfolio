@@ -15,14 +15,17 @@ import ThemeToggle from './ThemeToggle.astro';
 
     <nav class="site-nav" aria-label="Navegación principal">
       <ul class="site-nav__list">
-        {navigation.map((link) => (
+        {navigation.map((link, index) => (
           <li>
             <a
               class="site-nav__link"
               href={link.href}
               aria-current={Astro.url.pathname === link.href ? 'page' : undefined}
             >
-              {link.label}
+              <span class="site-nav__index" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span>{link.label}</span>
             </a>
           </li>
         ))}
@@ -36,17 +39,13 @@ import ThemeToggle from './ThemeToggle.astro';
   </div>
 </header>
 
-<script>
-  import '../scripts/mobile-nav';
-</script>
-
 <style>
   .site-header {
     position: sticky;
     top: 0;
     z-index: 20;
-    background: var(--color-bg);
     border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
   }
 
   .site-header__inner {
@@ -81,7 +80,7 @@ import ThemeToggle from './ThemeToggle.astro';
   .site-header__name {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     white-space: nowrap;
   }
@@ -99,18 +98,32 @@ import ThemeToggle from './ThemeToggle.astro';
   }
 
   .site-nav__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+    border-bottom: 1px solid transparent;
     color: var(--color-text-muted);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    letter-spacing: 0.08em;
-    text-decoration-color: var(--color-border-strong);
+    letter-spacing: 0.06em;
+    text-decoration: none;
     text-transform: uppercase;
+  }
+
+  .site-nav__index {
+    color: var(--color-text-muted);
+    font-size: 0.625rem;
   }
 
   .site-nav__link:hover,
   .site-nav__link[aria-current='page'] {
+    border-color: var(--color-primary);
     color: var(--color-text);
-    text-decoration-color: var(--color-primary);
+  }
+
+  .site-nav__link[aria-current='page'] .site-nav__index {
+    color: var(--color-primary);
   }
 
   .site-header__actions {

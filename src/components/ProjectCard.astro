@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { projectStatusLabel } from '../data/projects';
+import Tag from './Tag.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -12,83 +13,80 @@ interface Props {
 const { project, index, headingLevel = 'h3' } = Astro.props;
 const { title, summary, year, stack, cover, status } = project.data;
 const number = String(index + 1).padStart(2, '0');
-const Heading = headingLevel;
+const titleId = `project-title-${index}`;
 ---
 
 <article class="project-card">
-  <a class="project-card__link" href={`/proyectos/${project.id}/`}>
-    <span class="project-card__index" aria-hidden="true">
-      {number}
+  <div class="project-card__media">
+    <span class="project-card__case" aria-hidden="true">
+      CASE_{number}
     </span>
+    <Image
+      src={cover}
+      alt=""
+      widths={[480, 800, 1200]}
+      sizes="(min-width: 900px) 44vw, 100vw"
+      loading="lazy"
+    />
+  </div>
 
-    <div class="project-card__media">
-      <Image
-        src={cover}
-        alt=""
-        widths={[480, 800, 1200]}
-        sizes="(min-width: 900px) 44vw, 100vw"
-        loading="lazy"
-      />
-    </div>
-
-    <div class="project-card__body">
-      <p class="project-card__meta">
-        <span>{year}</span>
-        <span aria-hidden="true">·</span>
-        <span>{projectStatusLabel(status)}</span>
-      </p>
-
-      <Heading class="project-card__title">{title}</Heading>
-      <p class="project-card__summary">{summary}</p>
-
-      <ul class="project-card__stack" aria-label={`Tecnologías de ${title}`}>
-        {stack.map((item) => (
-          <li>{item}</li>
-        ))}
-      </ul>
-
-      <span class="project-card__cta" aria-hidden="true">
-        Ver caso
-        <span>→</span>
+  <div class="project-card__body">
+    <p class="project-card__meta">
+      <span>{year}</span>
+      <span aria-hidden="true">·</span>
+      <span class="project-card__status">
+        <span class="project-card__status-dot" aria-hidden="true"></span>
+        {projectStatusLabel(status)}
       </span>
+    </p>
+
+    {headingLevel === 'h2' ? (
+      <h2 class="project-card__title" id={titleId}>
+        {title}
+      </h2>
+    ) : (
+      <h3 class="project-card__title" id={titleId}>
+        {title}
+      </h3>
+    )}
+    <p class="project-card__summary">{summary}</p>
+
+    <ul class="project-card__stack" aria-label={`Tecnologías de ${title}`}>
+      {stack.map((item) => (
+        <li>
+          <Tag>{item}</Tag>
+        </li>
+      ))}
+    </ul>
+
+    <div class="project-card__footer">
+      <span class="project-card__path">/{project.id}</span>
+      <a class="project-card__cta" href={`/proyectos/${project.id}/`}>
+        Ver caso <span aria-hidden="true">→</span>
+      </a>
     </div>
-  </a>
+  </div>
 </article>
 
 <style>
   .project-card {
-    border-top: 1px solid var(--color-border);
-  }
-
-  .project-card:last-child {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .project-card__link {
     display: grid;
-    grid-template-columns: 2rem minmax(0, 1fr);
-    gap: var(--space-4) var(--space-3);
-    padding-block: var(--space-6);
-    color: var(--color-text);
-    text-decoration: none;
-  }
-
-  .project-card__index {
-    grid-column: 1;
-    grid-row: 1;
-    color: var(--color-text-muted);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.06em;
-  }
-
-  .project-card__media {
-    grid-column: 2;
-    grid-row: 1;
     overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background: var(--color-surface);
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .project-card:hover {
+    border-color: var(--color-primary);
+  }
+
+  .project-card__media {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface-raised);
   }
 
   .project-card__media img {
@@ -98,27 +96,56 @@ const Heading = headingLevel;
     transition: transform var(--duration-base) var(--ease-out);
   }
 
-  .project-card__link:hover .project-card__media img {
+  .project-card:hover .project-card__media img {
     transform: scale(1.02);
+  }
+
+  .project-card__case {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    padding: 0.35rem 0.55rem;
+    border-right: 1px solid rgb(255 255 255 / 12%);
+    border-bottom: 1px solid rgb(255 255 255 / 12%);
+    border-bottom-right-radius: var(--radius-sm);
+    background: var(--color-code-bg);
+    color: var(--color-code-string);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
   }
 
   .project-card__body {
     display: grid;
-    grid-column: 2;
-    grid-row: 2;
     gap: var(--space-3);
-    max-width: 60ch;
+    align-content: start;
+    padding: var(--space-5);
   }
 
   .project-card__meta {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: var(--space-2);
     color: var(--color-text-muted);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+  }
+
+  .project-card__status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .project-card__status-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--color-status);
   }
 
   .project-card__title {
@@ -126,7 +153,7 @@ const Heading = headingLevel;
     transition: color var(--duration-fast) var(--ease-out);
   }
 
-  .project-card__link:hover .project-card__title {
+  .project-card:hover .project-card__title {
     color: var(--color-primary);
   }
 
@@ -138,51 +165,63 @@ const Heading = headingLevel;
   .project-card__stack {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-1) var(--space-2);
+    gap: var(--space-2);
     margin: 0;
     padding: 0;
     list-style: none;
-    color: var(--color-text-muted);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
   }
 
-  .project-card__stack li:not(:last-child)::after {
-    content: '·';
-    margin-left: var(--space-2);
-    color: var(--color-border-strong);
+  .project-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+  }
+
+  .project-card__path {
+    overflow: hidden;
+    color: var(--color-text-muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .project-card__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    margin-top: var(--space-1);
     color: var(--color-primary);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .project-card__cta:hover {
+    color: var(--color-accent);
   }
 
   @media (min-width: 900px) {
-    .project-card__link {
-      grid-template-columns: 2rem minmax(0, 0.95fr) minmax(0, 1.05fr);
-      gap: var(--space-5) var(--space-6);
-      align-items: start;
+    .project-card {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     }
 
     .project-card__media {
-      grid-column: 2;
-      grid-row: 1 / span 2;
+      border-right: 1px solid var(--color-border);
+      border-bottom: 0;
+    }
+
+    .project-card__media img {
+      height: 100%;
+      min-height: 22rem;
     }
 
     .project-card__body {
-      grid-column: 3;
-      grid-row: 1;
-      padding-top: var(--space-2);
+      padding: var(--space-6);
     }
   }
 </style>

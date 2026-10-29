@@ -5,15 +5,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout
   title="Sobre mí"
-  description="Conoce a Marisa Peña Rey: desarrolladora web full-stack junior, formación DAW 2024–2026 y experiencia con Laravel, JavaScript, MySQL y WordPress."
+  description="Conoce a Marisa Peña Rey: desarrolladora web full-stack, DAW 2024–2026, y su foco en código mantenible, real y revisado con IA."
 >
   <section class="page">
     <div class="container">
       <div class="page__header">
-        <p class="page__eyebrow">02 — Perfil</p>
+        <p class="page__eyebrow">// 02 — Perfil</p>
         <h1 class="page__title">Sobre mí</h1>
         <p class="page__lead">
-          Desarrolladora web full-stack junior. Me interesa el código que se entiende, se mantiene y
+          Desarrolladora web full-stack. Me interesa el código que se entiende, se mantiene y
           resuelve un problema real.
         </p>
       </div>
@@ -36,28 +36,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <aside class="about-facts" aria-label="Datos rápidos">
-          <dl class="about-facts__list">
-            <div>
-              <dt>Ubicación</dt>
-              <dd>{site.location}</dd>
-            </div>
-            <div>
-              <dt>Disponibilidad</dt>
-              <dd>{site.availability} · Remoto</dd>
-            </div>
-            <div>
-              <dt>Formación</dt>
-              <dd>DAW 2024–2026 · Bachillerato Tecnológico 2022–2024</dd>
-            </div>
-            <div>
-              <dt>Idiomas</dt>
-              <dd>Español nativo · Inglés B1</dd>
-            </div>
-          </dl>
+          <div class="about-facts__panel">
+            <dl class="about-facts__list">
+              <div>
+                <dt>Ubicación</dt>
+                <dd>{site.location}</dd>
+              </div>
+              <div>
+                <dt>Disponibilidad</dt>
+                <dd>{site.availability} · Remoto</dd>
+              </div>
+              <div>
+                <dt>Formación</dt>
+                <dd>DAW 2024–2026 · Bachillerato Tecnológico 2022–2024</dd>
+              </div>
+              <div>
+                <dt>Idiomas</dt>
+                <dd>Español nativo · Inglés B1</dd>
+              </div>
+            </dl>
 
-          <a class="button button--secondary about-facts__download" href={site.cv} download>
-            Descargar CV
-          </a>
+            <a class="button button--secondary about-facts__download" href={site.cv} download>
+              Descargar CV
+            </a>
+          </div>
         </aside>
       </div>
     </div>
@@ -68,11 +70,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .about-grid {
     display: grid;
     gap: var(--space-7);
+    align-items: start;
   }
 
   .about-facts {
-    padding-top: var(--space-5);
-    border-top: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .about-facts__panel {
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
   }
 
   .about-facts__list {
@@ -100,15 +113,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .about-facts__download {
-    width: 100%;
-    margin-top: var(--space-5);
+    justify-self: start;
   }
 
   @media (min-width: 900px) {
     .about-grid {
       grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
       gap: var(--space-8);
-      align-items: start;
     }
   }
 </style>

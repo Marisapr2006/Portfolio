@@ -9,7 +9,10 @@ const { index, title, id } = Astro.props;
 ---
 
 <header class="section-heading">
-  <p class="section-heading__index">{index}</p>
+  <p class="section-heading__index">
+    <span aria-hidden="true">// </span>
+    {index}
+  </p>
   <h2 class="section-heading__title" id={id}>
     {title}
   </h2>
@@ -19,7 +22,7 @@ const { index, title, id } = Astro.props;
   .section-heading {
     display: grid;
     gap: var(--space-2);
-    margin-bottom: var(--space-7);
+    margin-bottom: var(--space-6);
     padding-top: var(--space-4);
     border-top: 1px solid var(--color-border-strong);
   }
@@ -37,7 +40,7 @@ const { index, title, id } = Astro.props;
 
   @media (min-width: 768px) {
     .section-heading {
-      grid-template-columns: 4rem minmax(0, 1fr);
+      grid-template-columns: 4.5rem minmax(0, 1fr);
       align-items: baseline;
       gap: var(--space-4);
     }

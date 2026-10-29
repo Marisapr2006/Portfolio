@@ -16,15 +16,21 @@ import { navigation } from '../data/site';
 
   <div class="mobile-nav__panel" id="mobile-nav-panel" hidden data-mobile-nav-panel>
     <nav class="mobile-nav__inner" aria-label="Menú móvil">
+      <p class="mobile-nav__label" aria-hidden="true">
+        // navegación
+      </p>
       <ul class="mobile-nav__list">
-        {navigation.map((link) => (
+        {navigation.map((link, index) => (
           <li>
             <a
               class="mobile-nav__link"
               href={link.href}
               aria-current={Astro.url.pathname === link.href ? 'page' : undefined}
             >
-              {link.label}
+              <span class="mobile-nav__index" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span>{link.label}</span>
             </a>
           </li>
         ))}
@@ -32,6 +38,10 @@ import { navigation } from '../data/site';
     </nav>
   </div>
 </div>
+
+<script>
+  import '../scripts/mobile-nav';
+</script>
 
 <style>
   .mobile-nav__toggle {
@@ -41,12 +51,12 @@ import { navigation } from '../data/site';
     min-height: 44px;
     padding: 0 var(--space-3);
     border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-md);
-    background: transparent;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
     color: var(--color-text);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     cursor: pointer;
   }
@@ -60,8 +70,8 @@ import { navigation } from '../data/site';
     position: fixed;
     inset: var(--header-height) 0 auto;
     z-index: 15;
-    background: var(--color-surface);
     border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
   }
 
   .mobile-nav__panel[hidden] {
@@ -74,27 +84,46 @@ import { navigation } from '../data/site';
     padding: var(--space-4) var(--container-padding) var(--space-5);
   }
 
+  .mobile-nav__label {
+    margin-bottom: var(--space-3);
+    color: var(--color-primary);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+  }
+
   .mobile-nav__list {
     display: grid;
-    gap: var(--space-1);
+    gap: 0;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
   .mobile-nav__link {
-    display: block;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
     padding: var(--space-3) 0;
     border-bottom: 1px solid var(--color-border);
     color: var(--color-text);
     font-family: var(--font-mono);
     font-size: var(--text-sm);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     text-decoration: none;
     text-transform: uppercase;
   }
 
+  .mobile-nav__index {
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+
   .mobile-nav__link[aria-current='page'] {
+    color: var(--color-primary);
+  }
+
+  .mobile-nav__link[aria-current='page'] .mobile-nav__index {
     color: var(--color-primary);
   }
 

@@ -1,37 +1,34 @@
 ---
 import { site } from '../data/site';
+import ProfileCard from './ProfileCard.astro';
 ---
 
 <section class="hero" aria-labelledby="hero-title">
   <div class="container hero__inner">
-    <div class="hero__title-block">
+    <div class="hero__content">
       <p class="hero__eyebrow">
-        <span>{site.role}</span>
-        <span class="hero__slash" aria-hidden="true">
-          /
+        <span class="hero__prompt" aria-hidden="true">
+          //
         </span>
-        <span>{site.location}</span>
-        <span class="hero__slash" aria-hidden="true">
-          /
-        </span>
-        <span>Remoto</span>
+        {site.role}
       </p>
-      <h1 class="hero__title" id="hero-title">
-        <span class="hero__name">Marisa</span>
-        <span class="hero__name">Peña Rey</span>
-      </h1>
-    </div>
 
-    <div class="hero__intro">
+      <h1 class="hero__title" id="hero-title">
+        {site.name}
+      </h1>
+
       <p class="hero__lead">
         Construyo aplicaciones web full-stack y documento cada decisión. Laravel, JavaScript y
         MySQL, con IA como acelerador y revisión humana.
       </p>
 
-      <p class="hero__availability">
-        <span class="hero__dot" aria-hidden="true"></span>
-        {site.availability}
-      </p>
+      <div class="hero__meta">
+        <span class="hero__status">
+          <span class="hero__dot" aria-hidden="true"></span>
+          {site.availability}
+        </span>
+        <span class="hero__location">{site.location} · Remoto</span>
+      </div>
 
       <div class="hero__actions">
         <a class="button button--primary" href="/proyectos/">
@@ -42,25 +39,35 @@ import { site } from '../data/site';
         </a>
       </div>
     </div>
+
+    <ProfileCard />
   </div>
 </section>
 
 <style>
   .hero {
-    padding-block: clamp(3rem, 8vw, 6.5rem);
+    padding-block: clamp(2.5rem, 6vw, 5.5rem);
     border-bottom: 1px solid var(--color-border);
   }
 
   .hero__inner {
     display: grid;
     gap: var(--space-7);
+    align-items: center;
+  }
+
+  .hero__content {
+    display: grid;
+    gap: var(--space-5);
+    align-content: center;
+    max-width: 42rem;
+    animation: hero-in 550ms var(--ease-out) both;
   }
 
   .hero__eyebrow {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    margin-bottom: var(--space-5);
     color: var(--color-text-muted);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
@@ -68,31 +75,67 @@ import { site } from '../data/site';
     text-transform: uppercase;
   }
 
-  .hero__slash {
+  .hero__prompt {
     color: var(--color-primary);
   }
 
   .hero__title {
-    display: grid;
+    max-width: 10ch;
     font-size: var(--text-4xl);
-    line-height: 0.9;
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.055em;
   }
 
-  .hero__name:last-child {
-    padding-left: 0.06em;
+  .hero__lead {
+    max-width: 48ch;
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
   }
 
-  .hero__title-block {
-    animation: hero-in 600ms var(--ease-out) both;
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
-  .hero__intro {
-    display: grid;
-    gap: var(--space-5);
-    align-content: end;
-    max-width: 34rem;
-    animation: hero-in 600ms var(--ease-out) 100ms both;
+  .hero__status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.35rem 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .hero__dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--color-status);
+    flex: none;
+  }
+
+  .hero__location {
+    color: var(--color-text-muted);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-1);
+  }
+
+  .hero :global(.profile-card) {
+    animation: hero-in 550ms var(--ease-out) 90ms both;
   }
 
   @keyframes hero-in {
@@ -106,46 +149,10 @@ import { site } from '../data/site';
     }
   }
 
-  .hero__lead {
-    font-size: var(--text-lg);
-    max-width: 46ch;
-  }
-
-  .hero__availability {
-    display: inline-flex;
-    align-items: flex-start;
-    gap: var(--space-2);
-    color: var(--color-text-muted);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .hero__dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    margin-top: 0.45em;
-    border-radius: 50%;
-    background: var(--color-accent);
-    flex: none;
-  }
-
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-
   @media (min-width: 900px) {
     .hero__inner {
-      grid-template-columns: 1.15fr 1fr;
-      align-items: end;
+      grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr);
       gap: var(--space-8);
-    }
-
-    .hero__intro {
-      justify-self: end;
     }
   }
 </style>
