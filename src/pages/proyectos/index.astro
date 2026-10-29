@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Proyectos"
+  description="Casos de estudio de Marisa Peña Rey: contexto, decisiones técnicas y resultado de cada proyecto web. Laravel, JavaScript y MySQL."
+>
+  <section class="page">
+    <div class="container">
+      <div class="page__header">
+        <p class="page__eyebrow">01 — Trabajo</p>
+        <h1 class="page__title">Proyectos</h1>
+        <p class="page__lead">
+          Casos de estudio con contexto, restricciones, decisiones y resultado. Sin capturas
+          decorativas: qué hice, por qué y qué aprendí.
+        </p>
+      </div>
+
+      <div class="callout">
+        <h2 class="callout__title">En preparación</h2>
+        <p class="callout__text">
+          Estoy documentando los dos primeros casos: este portfolio y mi proyecto final de DAW. Se
+          publican en las próximas semanas.
+        </p>
+        <div class="actions callout__actions">
+          <a class="button button--secondary" href="/contacto/">
+            Hablamos
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .callout__title {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-xl);
+  }
+
+  .callout__text {
+    max-width: 60ch;
+    color: var(--color-text-muted);
+  }
+
+  .callout__actions {
+    margin-top: var(--space-5);
+  }
+</style>

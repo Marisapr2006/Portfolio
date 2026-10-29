@@ -1,0 +1,152 @@
+---
+import { navigation, site } from '../data/site';
+import MobileNav from './MobileNav.astro';
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-header__brand" href="/">
+      <span class="site-header__mark" aria-hidden="true">
+        MP
+      </span>
+      <span class="site-header__name">{site.name}</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Navegación principal">
+      <ul class="site-nav__list">
+        {navigation.map((link) => (
+          <li>
+            <a
+              class="site-nav__link"
+              href={link.href}
+              aria-current={Astro.url.pathname === link.href ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <ThemeToggle />
+      <MobileNav />
+    </div>
+  </div>
+</header>
+
+<script>
+  import '../scripts/mobile-nav';
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: var(--header-height);
+  }
+
+  .site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .site-header__mark {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+  }
+
+  .site-header__name {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .site-nav {
+    display: none;
+  }
+
+  .site-nav__list {
+    display: flex;
+    gap: var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-nav__link {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-decoration-color: var(--color-border-strong);
+    text-transform: uppercase;
+  }
+
+  .site-nav__link:hover,
+  .site-nav__link[aria-current='page'] {
+    color: var(--color-text);
+    text-decoration-color: var(--color-primary);
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 768px) {
+    .site-nav {
+      display: block;
+    }
+
+    .site-header__name {
+      font-size: var(--text-sm);
+    }
+  }
+
+  @media (max-width: 359px) {
+    .site-header__inner,
+    .site-header__brand {
+      gap: var(--space-2);
+    }
+
+    .site-header__mark {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+
+    .site-header__name {
+      font-size: 0.625rem;
+      letter-spacing: 0.04em;
+    }
+
+    .site-header__actions {
+      gap: var(--space-1);
+    }
+  }
+</style>

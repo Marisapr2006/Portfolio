@@ -1,0 +1,135 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__inner">
+    <div class="hero__title-block">
+      <p class="hero__eyebrow">
+        <span>{site.role}</span>
+        <span class="hero__slash" aria-hidden="true">
+          /
+        </span>
+        <span>{site.location}</span>
+        <span class="hero__slash" aria-hidden="true">
+          /
+        </span>
+        <span>Remoto</span>
+      </p>
+      <h1 class="hero__title" id="hero-title">
+        <span class="hero__name">Marisa</span>
+        <span class="hero__name">Peña Rey</span>
+      </h1>
+    </div>
+
+    <div class="hero__intro">
+      <p class="hero__lead">
+        Construyo aplicaciones web full-stack y documento cada decisión. Laravel, JavaScript y
+        MySQL, con IA como acelerador y revisión humana.
+      </p>
+
+      <p class="hero__availability">
+        <span class="hero__dot" aria-hidden="true"></span>
+        {site.availability}
+      </p>
+
+      <div class="hero__actions">
+        <a class="button button--primary" href="/proyectos/">
+          Ver proyectos
+        </a>
+        <a class="button button--secondary" href={site.cv} download>
+          Descargar CV
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(3rem, 8vw, 6.5rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .hero__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero__slash {
+    color: var(--color-primary);
+  }
+
+  .hero__title {
+    display: grid;
+    font-size: var(--text-4xl);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  .hero__name:last-child {
+    padding-left: 0.06em;
+  }
+
+  .hero__intro {
+    display: grid;
+    gap: var(--space-5);
+    align-content: end;
+    max-width: 34rem;
+  }
+
+  .hero__lead {
+    font-size: var(--text-lg);
+    max-width: 46ch;
+  }
+
+  .hero__availability {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .hero__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-top: 0.45em;
+    border-radius: 50%;
+    background: var(--color-accent);
+    flex: none;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 900px) {
+    .hero__inner {
+      grid-template-columns: 1.15fr 1fr;
+      align-items: end;
+      gap: var(--space-8);
+    }
+
+    .hero__intro {
+      justify-self: end;
+    }
+  }
+</style>

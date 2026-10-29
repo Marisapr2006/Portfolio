@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://marisapena.vercel.app/sitemap-index.xml

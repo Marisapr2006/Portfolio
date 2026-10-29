@@ -1,0 +1,83 @@
+---
+import { site } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contacto"
+  description="Contacta con Marisa Peña Rey por email, LinkedIn o GitHub. Desarrolladora web full-stack junior en Las Palmas de Gran Canaria, disponible para remoto."
+>
+  <section class="page">
+    <div class="container">
+      <div class="page__header">
+        <p class="page__eyebrow">03 — Contacto</p>
+        <h1 class="page__title">Contacto</h1>
+        <p class="page__lead">
+          La forma más rápida es un email. Si prefieres, también estoy en LinkedIn y GitHub.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-block">
+          <h2 class="contact-block__title">Email</h2>
+          <p>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </p>
+        </div>
+
+        <div class="contact-block">
+          <h2 class="contact-block__title">Redes</h2>
+          <ul class="contact-block__list">
+            <li>
+              <a href={site.github}>GitHub</a>
+            </li>
+            <li>
+              <a href={site.linkedin}>LinkedIn</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="contact-block">
+          <h2 class="contact-block__title">Dónde estoy</h2>
+          <p>
+            {site.location}
+            <br />
+            {site.availability} · Remoto
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .contact-block {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .contact-block__title {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-xl);
+  }
+
+  .contact-block__list {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 768px) {
+    .contact-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-7);
+    }
+  }
+</style>

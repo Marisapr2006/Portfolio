@@ -1,0 +1,114 @@
+---
+import { site } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Sobre mí"
+  description="Conoce a Marisa Peña Rey: desarrolladora web full-stack junior, formación DAW 2024–2026 y experiencia con Laravel, JavaScript, MySQL y WordPress."
+>
+  <section class="page">
+    <div class="container">
+      <div class="page__header">
+        <p class="page__eyebrow">02 — Perfil</p>
+        <h1 class="page__title">Sobre mí</h1>
+        <p class="page__lead">
+          Desarrolladora web full-stack junior. Me interesa el código que se entiende, se mantiene y
+          resuelve un problema real.
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <div class="prose">
+          <p>
+            Soy Marisa Peña Rey. He terminado el Grado Superior en Desarrollo de Aplicaciones Web
+            (DAW) y busco mi primera oportunidad profesional como desarrolladora.
+          </p>
+          <p>
+            Trabajo con Laravel/PHP, JavaScript, HTML/CSS y MySQL, además de WordPress. Uso la IA
+            como acelerador, pero reviso cada línea y cada decisión: el criterio no se delega.
+          </p>
+          <p>
+            Estoy en Las Palmas de Gran Canaria y tengo disponibilidad para trabajar en remoto.
+            Quiero formar parte de un equipo donde pueda aprender de código real y aportar desde el
+            primer día.
+          </p>
+        </div>
+
+        <aside class="about-facts" aria-label="Datos rápidos">
+          <dl class="about-facts__list">
+            <div>
+              <dt>Ubicación</dt>
+              <dd>{site.location}</dd>
+            </div>
+            <div>
+              <dt>Disponibilidad</dt>
+              <dd>{site.availability} · Remoto</dd>
+            </div>
+            <div>
+              <dt>Formación</dt>
+              <dd>DAW 2024–2026 · Bachillerato Tecnológico 2022–2024</dd>
+            </div>
+            <div>
+              <dt>Idiomas</dt>
+              <dd>Español nativo · Inglés B1</dd>
+            </div>
+          </dl>
+
+          <a class="button button--secondary about-facts__download" href={site.cv} download>
+            Descargar CV
+          </a>
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .about-facts {
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .about-facts__list {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+  }
+
+  .about-facts__list div {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .about-facts dt {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .about-facts dd {
+    margin: 0;
+    font-size: var(--text-sm);
+  }
+
+  .about-facts__download {
+    width: 100%;
+    margin-top: var(--space-5);
+  }
+
+  @media (min-width: 900px) {
+    .about-grid {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
+</style>

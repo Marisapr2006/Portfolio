@@ -1,0 +1,11 @@
+.agents/
+.astro/
+.claude/
+.vercel/
+dist/
+docs/
+node_modules/
+package-lock.json
+playwright-report/
+public/
+test-results/
