@@ -1,0 +1,189 @@
+---
+import { site } from '../data/site';
+import { stackGroups } from '../data/stack';
+
+// The CV groups its stack in five blocks. The bento shows the method block as
+// a checklist and every other block as one flat list of tools.
+const method = stackGroups.find((group) => group.title === 'IA y metodología');
+const tools = stackGroups
+  .filter((group) => group.title !== 'IA y metodología')
+  .flatMap((group) => group.items);
+---
+
+<div class="bento">
+  <article class="bento__card bento__card--method" data-reveal>
+    <h3 class="bento__title">Método</h3>
+    <ul class="bento__checks">
+      {method?.items.map((item) => (
+        <li>
+          <svg
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 12.5l5 5L20 6.5"></path>
+          </svg>
+          {item}
+        </li>
+      ))}
+    </ul>
+  </article>
+
+  <article class="bento__card bento__card--tools" data-reveal>
+    <h3 class="bento__title">Herramientas</h3>
+    <ul class="bento__chips">
+      {tools.map((tool) => (
+        <li class="bento__chip">{tool}</li>
+      ))}
+    </ul>
+  </article>
+
+  <article class="bento__card bento__card--contact" data-reveal>
+    <h3 class="bento__title bento__title--contact">¿Hablamos de tu próximo proyecto?</h3>
+    <a class="bento__button" href={`mailto:${site.email}`}>
+      Escríbeme
+      <span class="bento__arrow" aria-hidden="true">
+        →
+      </span>
+    </a>
+  </article>
+</div>
+
+<style>
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: var(--space-6);
+  }
+
+  .bento__card {
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+    padding: var(--space-6);
+    border: var(--border-width) solid var(--color-outline-alt);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-hard-lg);
+    transition: transform var(--duration-base) var(--ease-spring);
+  }
+
+  .bento__card:hover {
+    transform: translateY(-5px) rotate(-0.6deg);
+  }
+
+  .bento__card--method {
+    box-shadow: 8px 8px 0 var(--color-shadow-alt);
+  }
+
+  .bento__card--tools {
+    border-color: var(--color-text);
+    background: var(--color-primary);
+    box-shadow: 8px 8px 0 var(--color-text);
+    color: var(--color-on-primary);
+  }
+
+  .bento__card--contact {
+    align-content: space-between;
+    border-color: var(--color-text);
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .bento__title {
+    font-size: var(--text-xl);
+  }
+
+  .bento__title--contact {
+    font-size: var(--text-2xl);
+    line-height: 1.05;
+  }
+
+  .bento__checks {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-lg);
+  }
+
+  .bento__checks li {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .bento__checks svg {
+    flex: none;
+    color: var(--color-accent);
+  }
+
+  .bento__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bento__chip {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    background: var(--color-on-primary);
+    color: var(--color-primary);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    transition: transform var(--duration-base) var(--ease-spring);
+  }
+
+  .bento__chip:hover {
+    transform: translateY(-4px) rotate(-3deg);
+  }
+
+  .bento__button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    justify-self: start;
+    min-height: 52px;
+    padding: 0 var(--space-5);
+    border: var(--border-width) solid var(--color-bg);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    box-shadow: 5px 5px 0 var(--color-shadow);
+    color: var(--color-text);
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .bento__button:hover {
+    color: var(--color-text);
+    transform: translate(-3px, -3px);
+    box-shadow: 8px 8px 0 var(--color-shadow-hover);
+  }
+
+  .bento__button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--color-shadow-hover);
+  }
+
+  .bento__arrow {
+    transition: transform var(--duration-base) var(--ease-spring);
+  }
+
+  .bento__button:hover .bento__arrow {
+    transform: translateX(0.4rem);
+  }
+</style>

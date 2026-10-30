@@ -20,27 +20,37 @@ const { href } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: var(--space-3);
-    min-height: 44px;
-    padding-bottom: var(--space-1);
-    border-bottom: 1px solid var(--color-border-strong);
+    min-height: 52px;
+    padding: 0 var(--space-5);
+    border: var(--border-width) solid var(--color-outline);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-hard-sm);
     color: var(--color-text);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.06em;
+    font-size: var(--text-base);
+    font-weight: 800;
     text-decoration: none;
-    text-transform: uppercase;
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
   }
 
   .arrow-link:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    color: var(--color-text);
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0 var(--color-shadow-hover);
+  }
+
+  .arrow-link:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--color-shadow-hover);
   }
 
   .arrow-link__icon {
-    transition: transform var(--duration-fast) var(--ease-out);
+    transition: transform var(--duration-base) var(--ease-spring);
   }
 
   .arrow-link:hover .arrow-link__icon {
-    transform: translateX(0.25rem);
+    transform: translateX(0.4rem) rotate(-8deg);
   }
 </style>

@@ -5,93 +5,113 @@ import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <header class="site-header">
-  <div class="container site-header__inner">
-    <a class="site-header__brand" href="/">
-      <span class="site-header__mark" aria-hidden="true">
-        MP
-      </span>
-      <span class="site-header__name">{site.name}</span>
-    </a>
+  <div class="container">
+    <div class="site-header__bar">
+      <a class="site-header__brand" href="/">
+        <span class="site-header__mark" aria-hidden="true">
+          MP
+        </span>
+        <span class="site-header__name">{site.name}</span>
+      </a>
 
-    <nav class="site-nav" aria-label="Navegación principal">
-      <ul class="site-nav__list">
-        {navigation.map((link, index) => (
-          <li>
-            <a
-              class="site-nav__link"
-              href={link.href}
-              aria-current={Astro.url.pathname === link.href ? 'page' : undefined}
-            >
-              <span class="site-nav__index" aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <span>{link.label}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          {navigation.map((link, index) => (
+            <li>
+              <a
+                class="site-nav__link"
+                href={link.href}
+                aria-current={Astro.url.pathname === link.href ? 'page' : undefined}
+              >
+                <span class="site-nav__index" aria-hidden="true">
+                  [{index + 1}]
+                </span>
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-    <div class="site-header__actions">
-      <ThemeToggle />
-      <MobileNav />
+      <div class="site-header__actions">
+        <ThemeToggle />
+        <MobileNav />
+      </div>
     </div>
   </div>
 </header>
+
+<script>
+  import '../scripts/mobile-nav';
+</script>
 
 <style>
   .site-header {
     position: sticky;
     top: 0;
     z-index: 20;
-    border-bottom: 1px solid var(--color-border);
+    padding-block: var(--space-3);
     background: var(--color-bg);
   }
 
-  .site-header__inner {
+  .site-header__bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
-    min-height: var(--header-height);
+    min-height: calc(var(--header-height) - var(--space-5));
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-outline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-hard-sm);
   }
 
   .site-header__brand {
     display: inline-flex;
     align-items: center;
     gap: var(--space-3);
+    min-height: 44px;
     color: var(--color-text);
     text-decoration: none;
+  }
+
+  .site-header__brand:hover {
+    color: var(--color-text);
   }
 
   .site-header__mark {
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
-    border: 1px solid var(--color-border-strong);
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: var(--radius-sm);
-    color: var(--color-primary);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.04em;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    font-size: var(--text-sm);
+    font-weight: 800;
+    transition: transform var(--duration-base) var(--ease-spring);
+  }
+
+  .site-header__brand:hover .site-header__mark {
+    transform: rotate(-8deg) scale(1.08);
   }
 
   .site-header__name {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: var(--text-base);
+    font-weight: 800;
+    letter-spacing: -0.02em;
     white-space: nowrap;
   }
 
   .site-nav {
     display: none;
+    margin-left: auto;
   }
 
   .site-nav__list {
     display: flex;
-    gap: var(--space-5);
+    gap: var(--space-1);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -99,31 +119,39 @@ import ThemeToggle from './ThemeToggle.astro';
 
   .site-nav__link {
     display: inline-flex;
-    align-items: baseline;
+    align-items: center;
     gap: var(--space-2);
-    padding-block: var(--space-2);
-    border-bottom: 1px solid transparent;
-    color: var(--color-text-muted);
+    min-height: 44px;
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
     font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.06em;
+    font-size: var(--text-sm);
+    font-weight: 700;
     text-decoration: none;
-    text-transform: uppercase;
+    text-transform: lowercase;
+    transition:
+      transform var(--duration-base) var(--ease-spring),
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
   }
 
   .site-nav__index {
-    color: var(--color-text-muted);
-    font-size: 0.625rem;
+    color: var(--color-accent);
   }
 
-  .site-nav__link:hover,
+  .site-nav__link:hover {
+    background: var(--color-highlight);
+    color: var(--color-on-highlight);
+    transform: translateY(-3px) rotate(-2deg);
+  }
+
+  .site-nav__link:hover .site-nav__index {
+    color: inherit;
+  }
+
   .site-nav__link[aria-current='page'] {
-    border-color: var(--color-primary);
-    color: var(--color-text);
-  }
-
-  .site-nav__link[aria-current='page'] .site-nav__index {
-    color: var(--color-primary);
+    color: var(--color-accent);
   }
 
   .site-header__actions {
@@ -132,30 +160,25 @@ import ThemeToggle from './ThemeToggle.astro';
     gap: var(--space-2);
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 960px) {
     .site-nav {
       display: block;
     }
-
-    .site-header__name {
-      font-size: var(--text-sm);
-    }
   }
 
-  @media (max-width: 359px) {
-    .site-header__inner,
+  @media (max-width: 400px) {
+    .site-header__bar,
     .site-header__brand {
       gap: var(--space-2);
     }
 
     .site-header__mark {
-      width: 1.75rem;
-      height: 1.75rem;
+      width: 2rem;
+      height: 2rem;
     }
 
     .site-header__name {
-      font-size: 0.625rem;
-      letter-spacing: 0.04em;
+      font-size: 0.875rem;
     }
 
     .site-header__actions {

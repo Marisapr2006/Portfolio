@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "prebuild": "npm run check:content",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "prettier --check .",
@@ -23,7 +22,8 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
-    "astro": "7.4.4"
+    "astro": "7.4.4",
+    "gsap": "3.15.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",

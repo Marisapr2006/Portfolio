@@ -41,7 +41,7 @@ test('el caso de estudio incluye las seis secciones', async ({ page }) => {
   }
 });
 
-test('no hay enlaces internos rotos en la home', async ({ page, request }) => {
+test('no hay enlaces internos roto en la home', async ({ page, request }) => {
   await page.goto('/');
 
   const hrefs = await page

@@ -1,20 +1,25 @@
 ---
 import { site } from '../data/site';
-import ProfileCard from './ProfileCard.astro';
 ---
 
 <section class="hero" aria-labelledby="hero-title">
   <div class="container hero__inner">
-    <div class="hero__content">
+    <div class="hero__main">
       <p class="hero__eyebrow">
-        <span class="hero__prompt" aria-hidden="true">
-          //
-        </span>
-        {site.role}
+        <span>{site.role}</span>
+        <span aria-hidden="true">/</span>
+        <span>{site.location}</span>
+        <span aria-hidden="true">/</span>
+        <span>Remoto</span>
       </p>
 
       <h1 class="hero__title" id="hero-title">
-        {site.name}
+        <span class="glitch" data-text="Marisa">
+          Marisa
+        </span>{' '}
+        <span class="glitch glitch--accent" data-text="Peña Rey">
+          Peña Rey<span class="hero__cursor" aria-hidden="true"></span>
+        </span>
       </h1>
 
       <p class="hero__lead">
@@ -22,17 +27,10 @@ import ProfileCard from './ProfileCard.astro';
         MySQL, con IA como acelerador y revisión humana.
       </p>
 
-      <div class="hero__meta">
-        <span class="hero__status">
-          <span class="hero__dot" aria-hidden="true"></span>
-          {site.availability}
-        </span>
-        <span class="hero__location">{site.location} · Remoto</span>
-      </div>
-
       <div class="hero__actions">
         <a class="button button--primary" href="/proyectos/">
           Ver proyectos
+          <span aria-hidden="true">→</span>
         </a>
         <a class="button button--secondary" href={site.cv} download>
           Descargar CV
@@ -40,119 +38,263 @@ import ProfileCard from './ProfileCard.astro';
       </div>
     </div>
 
-    <ProfileCard />
+    <div class="hero__aside">
+      <div class="boot">
+        <p class="boot__title">ARRANQUE · portfolio.sh</p>
+        <ul class="boot__list">
+          <li class="boot__line" style="--i: 0">
+            <span class="boot__ok">[ ok ]</span> cargando <strong>laravel</strong>
+          </li>
+          <li class="boot__line" style="--i: 1">
+            <span class="boot__ok">[ ok ]</span> cargando <strong>javascript</strong> y{' '}
+            <strong>typescript</strong>
+          </li>
+          <li class="boot__line" style="--i: 2">
+            <span class="boot__ok">[ ok ]</span> montando <strong>mysql</strong>
+          </li>
+          <li class="boot__line" style="--i: 3">
+            <span class="boot__ok">[ ok ]</span> ejecutando <strong>pruebas</strong> · playwright
+          </li>
+          <li class="boot__line" style="--i: 4">
+            <span class="boot__ok">[ ok ]</span> comprobando <strong>accesibilidad</strong> · axe
+          </li>
+          <li class="boot__line" style="--i: 5">
+            <span class="boot__wait">[ .. ]</span> esperando mi primera oportunidad
+            <span class="boot__cursor" aria-hidden="true"></span>
+          </li>
+        </ul>
+      </div>
+
+      <p class="hero__availability">{site.availability}</p>
+    </div>
   </div>
 </section>
 
 <style>
   .hero {
-    padding-block: clamp(2.5rem, 6vw, 5.5rem);
-    border-bottom: 1px solid var(--color-border);
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(3rem, 7vw, 5rem);
   }
 
   .hero__inner {
     display: grid;
-    gap: var(--space-7);
+    grid-template-columns: repeat(auto-fit, minmax(min(540px, 100%), 1fr));
+    gap: var(--space-8) var(--space-7);
     align-items: center;
   }
 
-  .hero__content {
+  .hero__main {
     display: grid;
     gap: var(--space-5);
-    align-content: center;
-    max-width: 42rem;
-    animation: hero-in 550ms var(--ease-out) both;
+    justify-items: start;
   }
 
   .hero__eyebrow {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
-    color: var(--color-text-muted);
+    gap: 0 var(--space-2);
+    color: var(--color-accent);
     font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.08em;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-  }
-
-  .hero__prompt {
-    color: var(--color-primary);
   }
 
   .hero__title {
-    max-width: 10ch;
+    display: grid;
+    margin-block: var(--space-2);
     font-size: var(--text-4xl);
-    font-weight: 700;
-    line-height: 0.92;
-    letter-spacing: -0.055em;
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    text-shadow: 6px 6px 0 var(--color-title-shadow);
+  }
+
+  .glitch {
+    position: relative;
+    display: block;
+  }
+
+  .glitch--accent {
+    color: var(--color-accent);
+  }
+
+  /* Decorative copies of the title. The empty alternative text after the slash
+     keeps screen readers from announcing them. */
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text) / '';
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    clip-path: inset(0 0 100% 0);
+    pointer-events: none;
+    text-shadow: none;
+    user-select: none;
+  }
+
+  .glitch::before {
+    color: var(--color-glitch-a);
+    transform: translateX(-6px);
+    animation: glitch-a 4s steps(1) 1.2s infinite;
+  }
+
+  .glitch::after {
+    color: var(--color-glitch-b);
+    transform: translateX(6px);
+    animation: glitch-b 4s steps(1) 1.2s infinite;
+  }
+
+  @keyframes glitch-a {
+    0%,
+    86%,
+    97%,
+    100% {
+      clip-path: inset(0 0 100% 0);
+    }
+    88% {
+      clip-path: inset(12% 0 58% 0);
+    }
+    91% {
+      clip-path: inset(64% 0 8% 0);
+    }
+    94% {
+      clip-path: inset(34% 0 38% 0);
+    }
+  }
+
+  @keyframes glitch-b {
+    0%,
+    87%,
+    98%,
+    100% {
+      clip-path: inset(0 0 100% 0);
+    }
+    89% {
+      clip-path: inset(52% 0 22% 0);
+    }
+    92% {
+      clip-path: inset(8% 0 70% 0);
+    }
+    95% {
+      clip-path: inset(70% 0 4% 0);
+    }
+  }
+
+  .hero__cursor,
+  .boot__cursor {
+    display: inline-block;
+    width: 0.5em;
+    height: 0.85em;
+    margin-left: 0.15em;
+    background: var(--color-accent);
+    vertical-align: -0.06em;
+    animation: blink 1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
   }
 
   .hero__lead {
-    max-width: 48ch;
-    color: var(--color-text-muted);
-    font-size: var(--text-lg);
-  }
-
-  .hero__meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .hero__status {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: 0.35rem 0.6rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    background: var(--color-surface);
-    color: var(--color-text);
-  }
-
-  .hero__dot {
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 50%;
-    background: var(--color-status);
-    flex: none;
-  }
-
-  .hero__location {
-    color: var(--color-text-muted);
+    max-width: 35rem;
+    font-size: 1.3125rem;
+    line-height: 1.5;
   }
 
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-top: var(--space-1);
+    gap: var(--space-4);
   }
 
-  .hero :global(.profile-card) {
-    animation: hero-in 550ms var(--ease-out) 90ms both;
+  .hero__aside {
+    position: relative;
+    padding-top: var(--space-5);
   }
 
-  @keyframes hero-in {
+  .hero__availability {
+    position: absolute;
+    top: 0;
+    right: calc(var(--space-2) * -1);
+    z-index: 1;
+    padding: var(--space-2) 1.125rem;
+    border: var(--border-width) solid var(--color-text);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    box-shadow: var(--shadow-hard-sm);
+    color: var(--color-on-accent);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    transform: rotate(5deg);
+  }
+
+  .boot {
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    border: var(--border-width) solid var(--color-outline);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-hard-lg);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 2;
+    transform: rotate(1.5deg);
+    animation: float 5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: rotate(1.5deg) translateY(0);
+    }
+    50% {
+      transform: rotate(-1.5deg) translateY(-14px);
+    }
+  }
+
+  .boot__title {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .boot__list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .boot__line {
+    animation: boot-line 0.6s steps(26) calc(var(--i) * 0.55s + 0.3s) both;
+  }
+
+  .boot__line strong {
+    font-weight: 700;
+  }
+
+  .boot__ok {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .boot__wait {
+    color: var(--color-primary);
+    font-weight: 700;
+    animation: blink 1s steps(1) infinite;
+  }
+
+  @keyframes boot-line {
     from {
-      opacity: 0;
-      transform: translateY(8px);
+      clip-path: inset(0 100% 0 0);
     }
     to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  @media (min-width: 900px) {
-    .hero__inner {
-      grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr);
-      gap: var(--space-8);
+      clip-path: inset(0 0 0 0);
     }
   }
 </style>

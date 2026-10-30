@@ -1,136 +1,97 @@
-# Especificaciones de la paleta de colores del portfolio
+# Especificaciones de diseño del portfolio
 
 ## 1. Descripción general
 
-El portfolio contará con dos temas visuales: **modo claro** y **modo oscuro**. Ambos compartirán una identidad visual basada en tonos violetas, con colores complementarios que garanticen una interfaz moderna, profesional, accesible y coherente.
+El portfolio tiene dos temas visuales: **modo oscuro** y **modo claro**. Comparten una identidad neobrutalista con guiño a terminal: bordes gruesos, sombras duras sin desenfoque, tipografía grande y acentos violetas y cian.
 
-El usuario podrá cambiar entre ambos modos mediante un botón de alternancia situado en la navegación principal. La preferencia seleccionada se guardará en el navegador para mantenerla en futuras visitas.
+El usuario puede cambiar entre ambos modos con el botón de la navegación principal. La preferencia se guarda en el navegador.
 
 ### Objetivos del diseño
 
 - Mantener una identidad visual consistente en ambos temas.
 - Facilitar la lectura y la navegación.
-- Destacar los proyectos y elementos interactivos.
-- Adaptar los colores al tema seleccionado.
-- Garantizar una buena experiencia en dispositivos móviles y ordenadores.
-- Aplicar transiciones suaves al cambiar de tema.
+- Destacar los proyectos y los elementos interactivos.
+- Llamar la atención con movimiento sin perjudicar la accesibilidad.
+- Garantizar una buena experiencia en móvil y escritorio.
 
-## 2. Paleta de colores: modo oscuro
+## 2. Paleta: modo oscuro
 
-El modo oscuro tendrá una estética tecnológica, elegante y minimalista. Utilizará fondos oscuros, superficies ligeramente diferenciadas y acentos violetas y cian.
+Fondo casi negro con tarjetas ligeramente más claras. Los bordes de controles y tarjetas son cian, y las sombras duras son violetas.
 
-| Elemento | Nombre | Código HEX |
+| Elemento | Token | HEX |
 |---|---|---|
-| Fondo principal | Midnight | `#11111B` |
-| Tarjetas y superficies | Surface | `#1C1B2B` |
-| Color primario | Lavender | `#A78BFA` |
-| Color de acento | Cyan | `#67E8F9` |
-| Texto principal | Soft White | `#F4F1FA` |
-| Texto secundario | Muted Lavender | `#A5A2B8` |
-| Bordes y separadores | Dark Border | `#343247` |
+| Fondo principal | `--color-bg` | `#0B0A12` |
+| Tarjetas y superficies | `--color-surface` | `#14121F` |
+| Superficie hundida | `--color-surface-sunken` | `#1C1B2B` |
+| Color primario | `--color-primary` | `#A78BFA` |
+| Color de acento y enlaces | `--color-accent` | `#67E8F9` |
+| Texto principal | `--color-text` | `#F4F1FA` |
+| Texto secundario | `--color-text-muted` | `#B9B6CC` |
+| Separadores finos | `--color-border` | `#343247` |
+| Borde de controles y tarjetas | `--color-outline` | `#67E8F9` |
+| Sombra dura | `--color-shadow` | `#A78BFA` |
+| Marcador de texto | `--color-highlight` | `#6D28D9` |
 
-### Aplicación de los colores
+## 3. Paleta: modo claro
 
-- **Fondo principal:** fondo general de la página y de las secciones principales.
-- **Tarjetas y superficies:** tarjetas de proyectos, paneles, menús y bloques de contenido.
-- **Color primario:** botones principales, indicadores seleccionados y elementos destacados.
-- **Color de acento:** enlaces, iconos, pequeños detalles y estados interactivos.
-- **Texto principal:** títulos, encabezados y contenido importante.
-- **Texto secundario:** descripciones, metadatos y explicaciones complementarias.
-- **Bordes y separadores:** delimitación de tarjetas, campos de formulario y divisiones visuales.
+Fondo luminoso con bordes y sombras de tinta oscura.
 
-## 3. Paleta de colores: modo claro
-
-El modo claro tendrá una estética luminosa, limpia y profesional. Se emplearán fondos claros, superficies blancas y tonos violetas más intensos para conservar la identidad visual y facilitar la lectura.
-
-| Elemento | Nombre | Código HEX |
+| Elemento | Token | HEX |
 |---|---|---|
-| Fondo principal | Soft Background | `#F8F7FC` |
-| Tarjetas y superficies | White | `#FFFFFF` |
-| Color primario | Deep Violet | `#7C3AED` |
-| Color de acento | Deep Cyan | `#0E7490` |
-| Texto principal | Deep Charcoal | `#211A30` |
-| Texto secundario | Muted Gray Violet | `#625A70` |
-| Bordes y separadores | Light Border | `#E5E0EE` |
+| Fondo principal | `--color-bg` | `#F8F7FC` |
+| Tarjetas y superficies | `--color-surface` | `#FFFFFF` |
+| Superficie hundida | `--color-surface-sunken` | `#EDE7FB` |
+| Color primario | `--color-primary` | `#6D28D9` |
+| Color de acento y enlaces | `--color-accent` | `#0B6B85` |
+| Texto principal | `--color-text` | `#211A30` |
+| Texto secundario | `--color-text-muted` | `#4A4258` |
+| Separadores finos | `--color-border` | `#D9D2EA` |
+| Borde de controles y tarjetas | `--color-outline` | `#211A30` |
+| Sombra dura | `--color-shadow` | `#211A30` |
+| Marcador de texto | `--color-highlight` | `#A5F3FC` |
 
-### Aplicación de los colores
+## 4. Tipografía
 
-- **Fondo principal:** fondo general de la web y de las secciones.
-- **Tarjetas y superficies:** tarjetas de proyectos, formularios, menús y bloques de contenido.
-- **Color primario:** botones principales, enlaces destacados y elementos seleccionados.
-- **Color de acento:** iconos, enlaces secundarios y pequeños detalles interactivos.
-- **Texto principal:** títulos, encabezados y contenido principal.
-- **Texto secundario:** descripciones, información auxiliar y metadatos.
-- **Bordes y separadores:** límites de tarjetas, campos y componentes de interfaz.
+- **Bricolage Grotesque** (variable, pesos 500–800): titulares en 800 y texto corrido.
+- **Space Mono** (400 y 700): etiquetas, metadatos, numeración de secciones y el bloque de arranque.
 
-## 4. Correspondencia entre los dos temas
-
-Los colores cambiarán según el tema, pero cada elemento conservará su función visual.
-
-| Elemento | Modo claro | Modo oscuro |
-|---|---|---|
-| Fondo | `#F8F7FC` | `#11111B` |
-| Superficies | `#FFFFFF` | `#1C1B2B` |
-| Color primario | `#7C3AED` | `#A78BFA` |
-| Color de acento | `#0E7490` | `#67E8F9` |
-| Texto principal | `#211A30` | `#F4F1FA` |
-| Texto secundario | `#625A70` | `#A5A2B8` |
-| Bordes | `#E5E0EE` | `#343247` |
+Ambas se sirven desde `public/fonts/` (WOFF2, subset latin) con licencia OFL.
 
 ## 5. Reglas de utilización
 
-1. El fondo principal debe ocupar la mayor parte de la interfaz.
-2. Las superficies deben diferenciarse del fondo sin generar contrastes excesivos.
-3. El color primario se utilizará para acciones principales y elementos importantes.
-4. El color de acento se reservará para detalles, iconos y enlaces secundarios.
-5. Los textos deben mantener un contraste suficiente con sus fondos.
-6. Los colores no deben utilizarse como único indicador de estados o errores; se acompañarán de texto o iconos cuando sea necesario.
-7. Los botones, enlaces y campos interactivos tendrán estados de `hover`, `focus`, `active` y `disabled`.
-8. Las transiciones entre temas serán suaves y no deberán dificultar la navegación.
-9. Las imágenes y capturas de los proyectos mantendrán sus colores originales.
-10. Se evitará el uso excesivo de degradados, sombras intensas y colores de acento.
+1. El fondo principal ocupa la mayor parte de la interfaz.
+2. Las tarjetas se separan del fondo con borde de 2 px y sombra dura, no con degradados.
+3. El color primario se reserva para acciones principales y sombras; el acento, para datos, enlaces y detalles.
+4. Los textos mantienen el contraste mínimo de WCAG 2.2 AA en ambos temas.
+5. Los colores no son el único indicador de estados; se acompañan de texto o iconos.
+6. Botones, enlaces y campos tienen estados `hover`, `focus`, `active` y `disabled`. El botón se desplaza hacia arriba a la izquierda al pasar el ratón y se hunde al pulsarlo.
+7. Las imágenes de los proyectos conservan sus colores originales.
+8. Las líneas de barrido y la viñeta CRT solo existen en el tema oscuro, y son decorativas.
+9. Toda animación se desactiva con `prefers-reduced-motion`, y ninguna cambia la opacidad del texto.
 
 ## 6. Implementación mediante variables CSS
 
-Los colores se definirán como variables globales para facilitar su mantenimiento y permitir cambiar de tema sin duplicar las hojas de estilo.
-
-Los componentes utilizarán estas variables en lugar de definir colores directamente en cada selector.
+Los tokens viven en `src/styles/tokens.css` y se cambian con el atributo `data-theme` de `<html>`. Los componentes usan siempre las variables y nunca colores literales.
 
 ## 7. Comportamiento del selector de tema
 
-- El selector estará disponible en la navegación principal.
-- Se utilizará un icono de sol para ofrecer el modo claro y un icono de luna para ofrecer el modo oscuro, según el estado actual.
-- El tema elegido se guardará en `localStorage`.
-- En la primera visita, se podrá utilizar la preferencia de apariencia del sistema operativo.
-- En las siguientes visitas, se priorizará el tema guardado por el usuario.
-- El cambio de tema actualizará las variables CSS sin recargar la página.
-- El selector tendrá un nombre accesible para lectores de pantalla y un indicador de foco visible.
+- Está en la navegación principal, con icono de sol o luna según el estado.
+- El tema elegido se guarda en `localStorage['mp-theme']`.
+- En la primera visita se usa la preferencia del sistema; después, la guardada.
+- El cambio actualiza las variables CSS sin recargar y se anuncia con una región `aria-live`.
+- El botón tiene nombre accesible y foco visible.
 
 ## 8. Accesibilidad y contraste
 
-La paleta deberá comprobarse para garantizar una lectura cómoda y una navegación accesible.
+Los contrastes medidos están en `docs/Spec.md` (sección Color). Resumen:
 
-Como referencia, se aplicarán los criterios WCAG 2.2 nivel AA:
+- Texto principal: 17.64:1 (oscuro) y 15.70:1 (claro).
+- Texto secundario: 9.96:1 y 8.91:1.
+- Acento como texto: 13.59:1 y 5.70:1.
+- Texto de botón primario: 7.24:1 y 7.10:1.
 
-- Contraste mínimo de **4,5:1** para texto normal.
-- Contraste mínimo de **3:1** para texto grande.
-- Contraste mínimo de **3:1** para componentes visuales y elementos gráficos relevantes.
-
-Se comprobarán especialmente los botones, los enlaces, el texto secundario y los estados de foco. Los colores definidos son una propuesta visual inicial; deberán verificarse las combinaciones concretas antes de dar por finalizada la interfaz.
+Las pruebas con axe se ejecutan en todas las rutas y en ambos temas.
 
 ## 9. Resultado esperado
 
-El portfolio dispondrá de dos temas visuales coherentes, con una identidad violeta reconocible, una buena jerarquía visual y una implementación sencilla de mantener.
-
-La paleta se utilizará en todas las secciones de la web para asegurar la consistencia entre la página de inicio, la presentación personal, los proyectos, las tecnologías, el contacto y el panel de administración.
-
-## 10. Identidad técnica y tipografía
-
-La identidad visual se alinea con la idea de **dossier técnico**:
-
-- Titulares en `system-ui` con peso semibold y espaciado controlado; sin serif display.
-- Texto en `system-ui`; etiquetas, metadatos, números y bloques de código en `ui-monospace`.
-- No se cargan webfonts: el sistema ya ofrece suficientes pesos y se reduce la latencia.
-- Las secciones usan numeración mono y regla fina.
-- Los bloques de código y artefactos (`perfil.ts`, `spec.md`) usan superficies oscuras y tokens de sintaxis propios del tema.
-- Las capturas se presentan como ficha técnica con marco sutil y CTA visible.
+Una identidad reconocible y llamativa, coherente entre la página de inicio, las secciones de sobre mí y experiencia, los proyectos y el contacto, y sencilla de mantener gracias a los tokens.

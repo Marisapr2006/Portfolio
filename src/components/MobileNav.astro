@@ -16,9 +16,6 @@ import { navigation } from '../data/site';
 
   <div class="mobile-nav__panel" id="mobile-nav-panel" hidden data-mobile-nav-panel>
     <nav class="mobile-nav__inner" aria-label="Menú móvil">
-      <p class="mobile-nav__label" aria-hidden="true">
-        // navegación
-      </p>
       <ul class="mobile-nav__list">
         {navigation.map((link, index) => (
           <li>
@@ -28,9 +25,9 @@ import { navigation } from '../data/site';
               aria-current={Astro.url.pathname === link.href ? 'page' : undefined}
             >
               <span class="mobile-nav__index" aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
+                [{index + 1}]
               </span>
-              <span>{link.label}</span>
+              {link.label}
             </a>
           </li>
         ))}
@@ -39,39 +36,36 @@ import { navigation } from '../data/site';
   </div>
 </div>
 
-<script>
-  import '../scripts/mobile-nav';
-</script>
-
 <style>
   .mobile-nav__toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: 44px;
-    padding: 0 var(--space-3);
-    border: 1px solid var(--color-border-strong);
+    padding: 0 var(--space-4);
+    border: var(--border-width) solid var(--color-outline);
     border-radius: var(--radius-sm);
-    background: var(--color-surface);
+    background: transparent;
     color: var(--color-text);
     font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: var(--text-sm);
+    font-weight: 700;
     cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
   }
 
   .mobile-nav__toggle:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    background: var(--color-highlight);
+    color: var(--color-on-highlight);
   }
 
   .mobile-nav__panel {
     position: fixed;
     inset: var(--header-height) 0 auto;
     z-index: 15;
-    border-bottom: 1px solid var(--color-border);
-    background: var(--color-surface);
+    padding-inline: var(--container-padding);
   }
 
   .mobile-nav__panel[hidden] {
@@ -81,20 +75,15 @@ import { navigation } from '../data/site';
   .mobile-nav__inner {
     max-width: var(--container-max);
     margin-inline: auto;
-    padding: var(--space-4) var(--container-padding) var(--space-5);
-  }
-
-  .mobile-nav__label {
-    margin-bottom: var(--space-3);
-    color: var(--color-primary);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-outline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-hard);
   }
 
   .mobile-nav__list {
     display: grid;
-    gap: 0;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -102,32 +91,30 @@ import { navigation } from '../data/site';
 
   .mobile-nav__link {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: var(--space-3);
-    padding: var(--space-3) 0;
+    min-height: 52px;
     border-bottom: 1px solid var(--color-border);
     color: var(--color-text);
     font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    letter-spacing: 0.04em;
+    font-size: var(--text-base);
+    font-weight: 700;
     text-decoration: none;
-    text-transform: uppercase;
+  }
+
+  .mobile-nav__list li:last-child .mobile-nav__link {
+    border-bottom: 0;
   }
 
   .mobile-nav__index {
-    color: var(--color-text-muted);
-    font-size: var(--text-xs);
+    color: var(--color-accent);
   }
 
   .mobile-nav__link[aria-current='page'] {
     color: var(--color-primary);
   }
 
-  .mobile-nav__link[aria-current='page'] .mobile-nav__index {
-    color: var(--color-primary);
-  }
-
-  @media (min-width: 768px) {
+  @media (min-width: 960px) {
     .mobile-nav {
       display: none;
     }

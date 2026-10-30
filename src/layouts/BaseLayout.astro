@@ -65,6 +65,20 @@ const personSchema = {
 
     <meta name="theme-color" content="#F8F7FC" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="/fonts/bricolage-grotesque-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/space-mono-latin-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     <script is:inline>
       (() => {
@@ -83,7 +97,7 @@ const personSchema = {
         root.style.colorScheme = theme;
         const meta = document.querySelector('meta[name="theme-color"]');
         if (meta) {
-          meta.setAttribute('content', theme === 'dark' ? '#11111B' : '#F8F7FC');
+          meta.setAttribute('content', theme === 'dark' ? '#0B0A12' : '#F8F7FC');
         }
       })();
     </script>
@@ -103,5 +117,8 @@ const personSchema = {
       <slot />
     </main>
     <Footer />
+    <script>
+      import '../scripts/motion';
+    </script>
   </body>
 </html>

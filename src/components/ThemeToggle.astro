@@ -15,7 +15,7 @@
     height="20"
     fill="none"
     stroke="currentColor"
-    stroke-width="1.5"
+    stroke-width="2"
     stroke-linecap="round"
     aria-hidden="true"
   >
@@ -29,7 +29,7 @@
     height="20"
     fill="none"
     stroke="currentColor"
-    stroke-width="1.5"
+    stroke-width="2"
     stroke-linecap="round"
     aria-hidden="true"
   >
@@ -50,18 +50,21 @@
     justify-content: center;
     width: 44px;
     height: 44px;
-    border: 1px solid var(--color-border-strong);
+    border: var(--border-width) solid var(--color-outline);
     border-radius: var(--radius-sm);
-    background: var(--color-surface);
+    background: transparent;
+    color: var(--color-text);
     cursor: pointer;
     transition:
-      border-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-base) var(--ease-spring),
+      background-color var(--duration-fast) var(--ease-out),
       color var(--duration-fast) var(--ease-out);
   }
 
   .theme-toggle:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    background: var(--color-highlight);
+    color: var(--color-on-highlight);
+    transform: rotate(-12deg);
   }
 
   .theme-toggle__icon--sun {

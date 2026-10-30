@@ -50,8 +50,8 @@ Blog, i18n, panel de administración, autenticación, base de datos, formulario 
 | Estilos | **CSS nativo** con custom properties | Sin Tailwind, sin framework de UI |
 | Contenido | **Content Collections + Markdown** | `src/content.config.ts`, loader `glob()` |
 | Validación | **Zod 4** vía `astro/zod` | Esquema de proyectos |
-| JavaScript | **TypeScript mínimo + islas vanilla** | Sin React/Vue/Svelte |
-| Tipografía | **Sistema sans** para texto y titulares + `ui-monospace` para etiquetas y código | Sin webfonts en v1; el sistema ya cubre pesos necesarios. |
+| JavaScript | **TypeScript mínimo + islas vanilla** y **GSAP** solo para animación (`src/scripts/motion.ts`) | Sin React/Vue/Svelte; GSAP + ScrollTrigger fijados en `3.15.0` |
+| Tipografía | **Bricolage Grotesque** variable (display y texto) + **Space Mono** 400/700 (etiquetas), self-hosted | WOFF2, subset latin (cubre todo el español), licencia OFL |
 | Tests | **Playwright** + `@axe-core/playwright` | Chromium; viewport móvil y escritorio |
 | Calidad | **Prettier** + `prettier-plugin-astro`, `astro check` | Sin ESLint en v1 (poco JS) |
 | Despliegue | **Vercel** (Hobby, salida estática) | Cero configuración; uso personal no comercial |
@@ -60,7 +60,7 @@ Blog, i18n, panel de administración, autenticación, base de datos, formulario 
 
 ### Dependencias previstas
 
-Producción: `astro`, `@astrojs/sitemap`.
+Producción: `astro`, `@astrojs/sitemap`, `gsap`.
 
 Desarrollo: `@astrojs/check`, `typescript`, `prettier`, `prettier-plugin-astro`, `@playwright/test`, `@axe-core/playwright`.
 
@@ -127,7 +127,7 @@ Notas de integración con el repo:
 │  └─ workflows/ci.yml          # check + lint + build + E2E
 ├─ public/
 │  ├─ cv/marisa-pena-rey-cv.pdf # CV descargable, < 1 MB
-│  ├─ fonts/                    # Reservado para fuentes futuras (no se usa en la interfaz actual)
+│  ├─ fonts/                    # Instrument Serif woff2 (latin + latin-ext)
 │  ├─ favicon.svg
 │  ├─ og-default.png            # 1200×630
 │  └─ robots.txt
@@ -344,34 +344,36 @@ const { title, summary, year, stack, cover } = project.data;
 
 Señales de identidad:
 
-- Secciones numeradas (`// 01 — Trabajo seleccionado`).
-- Reglas finas y aire amplio con grilla técnica.
-- Titulares en system-ui; etiquetas y bloques en mono; texto en system-ui.
-- Violeta reservado para interacción; cian para datos y enlaces.
-- Motivo sutil de rejilla o regla fina al 4 % de opacidad en cabeceras de sección.
-- Capturas con marco de ficha técnica y CTA visible.
+Dirección visual (decidida tras comparar tres propuestas en un lienzo de diseño): **neobrutalismo con guiño a terminal**.
 
-Prohibido: glassmorphism, degradados llamativos, emojis decorativos, iconos de relleno, animaciones de scroll pesadas, contadores falsos, carruseles.
+- Secciones numeradas entre corchetes (`[1] Trabajo seleccionado`).
+- Bordes de 2 px, sombras duras desplazadas sin desenfoque y botones que se hunden al pulsar.
+- Titulares enormes en Bricolage Grotesque 800 con sombra dura; etiquetas y metadatos en Space Mono.
+- El titular del hero lleva un glitch periódico (capas decorativas en pseudo-elementos con texto alternativo vacío) y la tarjeta de arranque simula un `portfolio.sh`.
+- Tema oscuro con efecto CRT sutil (líneas de barrido y viñeta al 3 %); el tema claro no lleva CRT.
+- Cintas inclinadas con marquee, subrayados que se dibujan y chips que reaccionan al pasar el ratón.
+- Violeta para acciones y sombras; cian para datos, acentos y enlaces.
+
+Prohibido: glassmorphism, degradados de relleno llamativos, emojis decorativos, iconos de relleno, animaciones que bloqueen la interacción o cambien el contraste del texto, contadores falsos, carruseles.
 
 ### Tipografía
 
 | Rol | Fuente | Uso |
 |---|---|---|
-| Display | `system-ui, -apple-system, 'Segoe UI', sans-serif` (peso 650) | `h1`, `h2`, cifras grandes |
-| Texto | `system-ui, -apple-system, 'Segoe UI', sans-serif` | Párrafos, navegación, botones |
-| Mono | `ui-monospace, 'Cascadia Code', 'JetBrains Mono', monospace` | Etiquetas, metadatos, números de sección |
+| Display y texto | Bricolage Grotesque (variable, 500–800) | Titulares en 800; párrafos y botones en 500–800 |
+| Mono | Space Mono 400/700 | Etiquetas, metadatos, números de sección, bloque de arranque |
 
 Escala fluida:
 
 ```css
 --text-xs: 0.75rem;
---text-sm: 0.875rem;
---text-base: 1rem;
---text-lg: clamp(1.125rem, 0.9rem + 0.6vw, 1.25rem);
---text-xl: clamp(1.375rem, 1rem + 1.2vw, 1.75rem);
---text-2xl: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
---text-3xl: clamp(2.25rem, 1.4rem + 3.4vw, 4rem);
---text-4xl: clamp(2.75rem, 1.5rem + 5vw, 5.5rem);
+--text-sm: 0.9375rem;
+--text-base: 1.0625rem;
+--text-lg: clamp(1.1875rem, 1rem + 0.6vw, 1.375rem);
+--text-xl: clamp(1.5rem, 1.1rem + 1.2vw, 2rem);
+--text-2xl: clamp(1.875rem, 1.2rem + 2.2vw, 3rem);
+--text-3xl: clamp(2.5rem, 1.4rem + 3.8vw, 4.75rem);
+--text-4xl: clamp(3.75rem, 0.5rem + 10vw, 9rem);
 ```
 
 ### Color
@@ -380,37 +382,42 @@ Base: `docs/Design.md`. Contrastes medidos y corregidos:
 
 | Token | Oscuro | Claro | Contraste verificado |
 |---|---|---|---|
-| `--color-bg` | `#11111B` | `#F8F7FC` | — |
-| `--color-surface` | `#1C1B2B` | `#FFFFFF` | — |
-| `--color-text` | `#F4F1FA` | `#211A30` | 16.80:1 / 15.70:1 sobre bg |
-| `--color-text-muted` | `#A5A2B8` | `#625A70` | 7.55:1 / 6.13:1 sobre bg |
-| `--color-primary` | `#A78BFA` | `#7C3AED` | 6.89:1 / 5.35:1 sobre bg |
-| `--color-accent` | `#67E8F9` | `#0E7490` | 12.94:1 / 5.03:1 sobre bg |
-| `--color-border` | `#343247` | `#E5E0EE` | Decorativo (1.51:1 / 1.21:1) |
-| `--color-border-strong` | `#6C6883` | `#8A829C` | 3.52:1 / 3.42:1 sobre bg |
-| `--color-focus` | `#67E8F9` | `#7C3AED` | ≥ 3:1 en ambos temas |
+| `--color-bg` | `#0B0A12` | `#F8F7FC` | — |
+| `--color-surface` | `#14121F` | `#FFFFFF` | — |
+| `--color-surface-sunken` | `#1C1B2B` | `#EDE7FB` | — |
+| `--color-text` | `#F4F1FA` | `#211A30` | 17.64:1 / 15.70:1 sobre bg |
+| `--color-text-muted` | `#B9B6CC` | `#4A4258` | 9.96:1 / 8.91:1 sobre bg |
+| `--color-primary` | `#A78BFA` | `#6D28D9` | 7.24:1 / 6.67:1 sobre bg |
+| `--color-accent` | `#67E8F9` | `#0B6B85` | 13.59:1 / 5.70:1 sobre bg (5.04:1 sobre superficie hundida) |
+| `--color-border` | `#343247` | `#D9D2EA` | Decorativo; separadores finos |
+| `--color-outline` | `#67E8F9` | `#211A30` | Borde de controles y tarjetas: 13.59:1 / 15.70:1 sobre bg |
+| `--color-shadow` | `#A78BFA` | `#211A30` | Sombra dura decorativa |
+| `--color-highlight` | `#6D28D9` | `#A5F3FC` | Marcador de texto; el texto encima mide 6.36:1 / 13.41:1 |
+| `--color-focus` | `#67E8F9` | `#6D28D9` | ≥ 3:1 en ambos temas |
 
 Reglas de uso:
 
-1. `--color-border` **nunca** delimita un control interactivo; para eso existe `--color-border-strong`.
-2. Botón primario: fondo `--color-primary` y texto `--color-bg` en oscuro (6.89:1); texto `#FFFFFF` en claro (5.70:1).
+1. `--color-border` **nunca** delimita un control interactivo; para eso existe `--color-outline`.
+2. Botón primario: fondo `--color-primary` y texto `--color-on-primary` (`#0B0A12` en oscuro, 7.24:1; `#FFFFFF` en claro, 7.10:1).
 3. Los enlaces siempre llevan subrayado; el color no es el único indicador.
-4. El foco usa `outline: 2px solid var(--color-focus)` con `outline-offset: 2px`, visible en ambos temas.
+4. El foco usa `outline: 3px solid var(--color-focus)` con `outline-offset: 3px`, visible en ambos temas.
 5. Las imágenes de proyecto conservan sus colores originales.
 
 ### Layout y espaciado
 
-- Contenedor: `max-width: 1200px`, padding lateral fluido `clamp(1.25rem, 5vw, 4rem)`.
+- Contenedor: `max-width: 1280px`, padding lateral fluido `clamp(1.25rem, 5vw, 2.5rem)`.
 - Texto largo: `max-width: 65ch`.
 - Escala de espacio: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128 px.
-- Radios: 2 px en etiquetas, 4 px en botones, 8 px en imágenes de caso. Nada de píldoras gigantes.
-- Proyectos: lista editorial de una columna. Cada fila combina índice, portada y contenido; en ≥ 900 px se divide en tres columnas. Se evita la cuadrícula de tarjetas idénticas para que el caso único no quede huérfano.
+- Radios: 6 px en chips, 10 px en botones, 16 px en tarjetas; píldora solo en la etiqueta de disponibilidad.
+- Proyectos: lista de una columna con tarjetas grandes (portada + contenido, en dos columnas desde 900 px). Se evita la cuadrícula de tarjetas idénticas para que el caso único no quede huérfano.
 
 ### Movimiento
 
-- Transiciones de 150–250 ms con `ease-out`.
-- Entrada del hero: opacidad + 8 px de desplazamiento, escalonada, una sola vez.
-- `prefers-reduced-motion: reduce` desactiva todas las animaciones y transiciones no esenciales.
+- Transiciones de 150–250 ms con `ease-out`; `ease-spring` solo en chips, flechas y tarjetas.
+- CSS puro: glitch del titular, líneas de arranque, cursor, cintas, subrayados y hover.
+- GSAP (`motion.ts`): entrada del hero, revelados al hacer scroll, línea de tiempo de experiencia y velocidad de las cintas según el scroll. Los revelados y los nodos de la línea de tiempo comparten un único `IntersectionObserver`, en vez de un disparador por elemento, para evitar un reflujo por cada uno.
+- Toda animación usa solo `transform` (nunca opacidad del texto), para que el contraste no cambie en ningún fotograma. El contenido es visible sin JavaScript.
+- `prefers-reduced-motion: reduce` desactiva las animaciones CSS y no registra ninguna animación de GSAP.
 - Nada de parallax ni scroll hijacking.
 
 ### Tema claro/oscuro
@@ -428,12 +435,15 @@ Reglas de uso:
 
 ### `/` — Inicio
 
-1. **Header** fijo con nombre, navegación (Proyectos, Sobre mí, Contacto), toggle de tema y menú móvil.
+1. **Header** fijo con nombre, navegación (Proyectos, Sobre mí, Experiencia, Contacto), toggle de tema y menú móvil.
 2. **Hero:** eyebrow con rol y ubicación, `h1` con el nombre, subtítulo de propuesta de valor, badge de disponibilidad, CTA primaria "Ver proyectos" y secundaria "Descargar CV".
-3. **Trabajo seleccionado:** dos casos `featured`, con número, título, resumen, año, stack y estado.
-4. **Cómo trabajo:** cuatro pasos (Especificar, Planificar, Implementar, Verificar) y un extracto real de un artefacto (fragmento de esta spec, una decisión o un commit). Enlace al caso del propio portfolio.
-5. **Stack:** tecnologías agrupadas (Lenguajes, Backend, Datos, Herramientas, IA y metodologías).
-6. **CTA de contacto** + footer.
+3. **Cintas** de tecnologías y método (decorativas).
+4. **Trabajo seleccionado:** casos `featured`, con número, título, resumen, año, stack y estado.
+5. **Sobre mí:** foto, datos rápidos, bio, competencias y CV. Reutiliza el mismo bloque que `/sobre-mi/`.
+6. **Experiencia y formación:** línea de tiempo con las prácticas (FCT), el DAW y el Bachillerato. Datos en `src/data/experience.ts`.
+7. **Cómo trabajo:** cuatro pasos (Especificar, Planificar, Implementar, Verificar) y un extracto real de un artefacto (fragmento de esta spec, una decisión o un commit). Enlace al caso del propio portfolio.
+8. **Stack:** tecnologías agrupadas (Lenguajes, Backend, Datos, Herramientas, IA y metodologías).
+9. **CTA de contacto** + footer.
 
 La propuesta de valor debe ser concreta, en primera persona y sin adjetivos vacíos. Ejemplo de tono: "Construyo aplicaciones web full-stack y documento cada decisión. Laravel, JavaScript y MySQL, con IA como acelerador y revisión humana."
 
@@ -456,12 +466,11 @@ La propuesta de valor debe ser concreta, en primera persona y sin adjetivos vac�
 
 ### `/sobre-mi/` — Sobre mí
 
-- Foto (solo si hay una buena; si no, composición tipográfica).
+- Foto de perfil (`src/assets/profile/marisa-pena-rey.jpg`, optimizada por Astro).
 - Bio en tres párrafos cortos: quién es, qué hace y qué busca.
-- Formación: DAW 2024–2026, Bachillerato Tecnológico 2022–2024.
-- Stack agrupado.
-- Idiomas: Español nativo, Inglés B1.
-- "Cómo trabajo" ampliado.
+- Datos rápidos: ubicación, disponibilidad, formación e idiomas (Español nativo, Inglés B1).
+- Competencias del CV.
+- Experiencia y formación (línea de tiempo). Las prácticas describen tareas, nunca material ni clientes de la empresa.
 - Descarga de CV.
 
 ### `/contacto/` — Contacto
@@ -538,7 +547,7 @@ Presupuestos medidos en móvil, Lighthouse, build de producción:
 |---|---|
 | JS inicial | ≤ 20 KB gzip |
 | CSS | ≤ 25 KB gzip |
-| Fuentes | 0 KB en v1 (sistema + mono) |
+| Fuentes | ≤ 60 KB total, 2 archivos máximo |
 | LCP | < 2.0 s en 4G |
 | CLS | < 0.05 |
 | INP | < 200 ms |
@@ -549,8 +558,8 @@ Presupuestos medidos en móvil, Lighthouse, build de producción:
 
 Decisiones para cumplirlo:
 
-- Cero frameworks de cliente; solo islas vanilla para tema, menú y copiar email.
-- No hay webfonts: se usa `system-ui` y `ui-monospace`; la portada sigue siendo la única imagen pesada de contenido.
+- Sin frameworks de UI; islas vanilla para tema y menú. GSAP + ScrollTrigger (≈ 43 KB gzip junto con el resto del JS) solo para animación, como mejora progresiva.
+- Fuente Bricolage precargada con `font-display: swap` y subset latin.
 - Imágenes en AVIF/WebP con `width`/`height`, `srcset` y `loading="lazy"` salvo la portada del caso.
 - CSS crítico en una sola hoja; sin librerías de iconos.
 - Sin scripts de terceros que bloqueen el render.
@@ -690,10 +699,10 @@ npm run test:e2e
 Decisiones tomadas al ejecutar la especificación:
 
 - Versiones fijadas: Astro **7.4.4**, `@astrojs/sitemap` **3.7.4**, TypeScript **6.0.3** (el peer de `@astrojs/check` admite `^5 || ^6`, no TS 7), Prettier **3.9.10**, Playwright **1.64.1** y axe **4.14.0**.
-- `trailingSlash: 'always'` se configura en `astro.config.mjs`; `vercel.json` lo replica y añade cabeceras de seguridad (`X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`) y cache inmutable para estáticos.
+- `trailingSlash: 'always'` se configura en `astro.config.mjs`; `vercel.json` lo replica y añade cabeceras de seguridad (`X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`) y cache inmutable para `/fonts/`.
 - URL canónica provisional: `https://marisapena.vercel.app`. Se actualizará en `astro.config.mjs` y `public/robots.txt` cuando se confirme el proyecto de Vercel o el dominio propio.
 - `docs/Arquitecture.md` queda marcado como documento histórico.
-- Se descartan las fuentes web y se adopta la identidad técnica con `system-ui` y `ui-monospace`.
+- Fuentes self-hosted en `public/fonts/` con licencia OFL incluida (ver Fase 2 para el cambio de familia).
 - CV copiado a `public/cv/marisa-pena-rey-cv.pdf` desde `docs/CV_Marisa.pdf`.
 - Suites E2E iniciales: rutas y 404, persistencia del tema, menú móvil y axe en cuatro páginas × dos temas.
 - Las páginas de Proyectos, Sobre mí y Contacto existen con contenido real mínimo para que la navegación no tenga enlaces muertos; se amplían en la Fase 2.
@@ -709,13 +718,13 @@ Decisiones tomadas al ejecutar la especificación:
 - Tests añadidos: caso de estudio con seis secciones, enlaces internos sin 404 y axe también en la página de detalle.
 - Pendiente para las fases 2 y 3: segundo caso, OG image, copy ampliado de Sobre mí y Contacto, botón de copiar email, CI y despliegue en Vercel.
 
-### Fase 2 — Identidad técnica y rediseño editorial a ficha técnica (rama `feat/02-technical-notebook`)
+### Fase 2 — Rediseño visual C4 (rama `feat/01-content-home`)
 
-- Se abandona la tipografía serif Instrument Serif y se adopta `system-ui` + `ui-monospace`; se eliminan los archivos de fuente y el preload.
-- Se actualiza la identidad visual a **technical notebook**: titulares sans, etiquetas mono, bloques de código, reglas finas y fichas de proyecto con CTA.
-- Se extraen `ProfileCard`, `StackGrid`, `ProcessGrid`, `CopyEmail`; se usa `DossierMeta` con `confidential`.
-- Se corrige el foco del menú móvil con manejo de `focusout` y se añade regresión.
-- Se añade validación de contenido al `prebuild`; el validador pasa a soporte recursivo y el loader usa `**/*.md`.
-- Se corrige la afirmación de previews de Vercel hasta que el repositorio esté conectado.
-- Se actualiza la accesibilidad: contraste de navegación y nombre accesible de tarjetas con CTA visible.
-- Se añade test de copia de email y navegación del índice del caso.
+- Dirección elegida entre tres propuestas (terminal, editorial cinético y pop estructurado) y sus variantes, comparadas en un lienzo de diseño: pop estructurado con el glitch/CRT de la propuesta de terminal ("C4").
+- Tipografía: Bricolage Grotesque (variable) y Space Mono self-hosted; se retira Instrument Serif. Paleta oscura nueva (`#0B0A12`) y tema claro derivado de la misma estructura; contrastes medidos en la tabla de color.
+- Dependencia nueva aprobada: `gsap@3.15.0` (fijada). Solo se importa en `src/scripts/motion.ts`.
+- Secciones nuevas en la home y en `/sobre-mi/`: Sobre mí (con foto) y Experiencia y formación (prácticas FCT en Empire Systems, DAW, Bachillerato). Sin teléfono ni material de la empresa.
+- Se mantienen los contratos de los tests: títulos, un `h1` por página, botón de tema, `[data-theme-status]`, menú móvil y `navigation` con cuatro enlaces (Proyectos, Sobre mí, Experiencia, Contacto; el menú de escritorio aparece desde 960 px).
+- Los efectos decorativos del hero no alteran el texto: el cursor es `aria-hidden` y las capas del glitch son pseudo-elementos con `content: attr(data-text) / ''` (texto alternativo vacío), de modo que ni el lector de pantalla ni el DOM repiten el nombre.
+- La portada del caso "Este portfolio" se regeneró con el diseño nuevo, y el texto del caso se corrigió con los pesos reales (CSS 7 KB gzip; JS 43 KB gzip).
+- Verificación: `npm run verify` y la suite completa contra el build de producción (`astro preview`), 39 correctos y 1 omitido a propósito (menú móvil en escritorio).

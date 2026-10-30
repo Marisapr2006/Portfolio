@@ -1,0 +1,79 @@
+---
+interface Props {
+  items: readonly string[];
+  variant?: 'solid' | 'outline';
+  reverse?: boolean;
+}
+
+const { items, variant = 'solid', reverse = false } = Astro.props;
+---
+
+<div
+  class:list={['marquee', `marquee--${variant}`, { 'marquee--reverse': reverse }]}
+  aria-hidden="true"
+>
+  <div class="marquee__track" data-marquee-track>
+    {[0, 1].map(() => (
+      <ul class="marquee__group">
+        {items.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    border-block: var(--border-width) solid var(--color-outline);
+    padding-block: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .marquee--solid {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+
+  .marquee--outline {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 34s linear infinite;
+  }
+
+  .marquee--reverse .marquee__track {
+    animation-direction: reverse;
+  }
+
+  .marquee__group {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .marquee__group li {
+    padding-inline: var(--space-4);
+  }
+
+  .marquee__group li::after {
+    content: '//';
+    margin-left: var(--space-5);
+    opacity: 0.6;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

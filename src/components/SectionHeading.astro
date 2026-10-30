@@ -3,44 +3,49 @@ interface Props {
   index: string;
   title: string;
   id?: string;
+  level?: 'h1' | 'h2';
+  size?: 'md' | 'xl';
 }
 
-const { index, title, id } = Astro.props;
+const { index, title, id, level = 'h2', size = 'md' } = Astro.props;
+const Heading = level;
 ---
 
-<header class="section-heading">
-  <p class="section-heading__index">
-    <span aria-hidden="true">// </span>
-    {index}
+<header class:list={['section-heading', `section-heading--${size}`]} data-reveal>
+  <p class="section-heading__index" aria-hidden="true">
+    [{index}]
   </p>
-  <h2 class="section-heading__title" id={id}>
+  <Heading class="section-heading__title" id={id}>
     {title}
-  </h2>
+  </Heading>
 </header>
 
 <style>
   .section-heading {
     display: grid;
     gap: var(--space-2);
-    margin-bottom: var(--space-6);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--color-border-strong);
+    margin-bottom: var(--space-7);
   }
 
   .section-heading__index {
-    color: var(--color-primary);
+    color: var(--color-accent);
     font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.08em;
+    font-size: var(--text-sm);
+    font-weight: 700;
   }
 
   .section-heading__title {
-    font-size: var(--text-2xl);
+    font-size: var(--text-3xl);
+    letter-spacing: -0.04em;
+  }
+
+  .section-heading--xl .section-heading__title {
+    font-size: var(--text-display);
   }
 
   @media (min-width: 768px) {
     .section-heading {
-      grid-template-columns: 4.5rem minmax(0, 1fr);
+      grid-template-columns: auto minmax(0, 1fr);
       align-items: baseline;
       gap: var(--space-4);
     }

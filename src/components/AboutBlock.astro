@@ -1,0 +1,287 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/profile/marisa-pena-rey.jpg';
+import { about } from '../data/about';
+import { skills } from '../data/experience';
+import { site } from '../data/site';
+
+interface Props {
+  experienceHref?: string;
+}
+
+const { experienceHref = '/sobre-mi/#experiencia' } = Astro.props;
+---
+
+<div class="about">
+  <div class="about__side" data-reveal>
+    <figure class="about__portrait">
+      <Image
+        src={portrait}
+        alt="Retrato de Marisa Peña Rey"
+        widths={[320, 480, 640]}
+        sizes="(min-width: 960px) 30vw, 80vw"
+        loading="lazy"
+      />
+      <figcaption class="about__badge">Las Palmas · Remoto</figcaption>
+    </figure>
+
+    <aside class="about__facts" aria-label="Datos rápidos">
+      <p class="about__facts-title">
+        <span aria-hidden="true">$</span> whoami
+      </p>
+      <dl class="about__facts-list">
+        {about.facts.map((fact) => (
+          <div class="about__fact">
+            <dt>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </aside>
+  </div>
+
+  <div class="about__body">
+    <p class="about__statement" data-reveal>
+      {about.statement.before}{' '}
+      {about.statement.marks.map((text, index) => (
+        <>
+          {index > 0 && (index === about.statement.marks.length - 1 ? ' y ' : ', ')}
+          <mark class="about__mark" style={`--i: ${index}`}>
+            {text}
+          </mark>
+        </>
+      ))}
+      .
+    </p>
+
+    <div class="about__text prose" data-reveal>
+      {about.paragraphs.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
+
+    <div class="about__skills" data-reveal>
+      <h3 class="about__skills-title">Competencias</h3>
+      <ul class="about__skills-list">
+        {skills.map((skill, index) => (
+          <li class="about__skill" style={`--tilt: ${index % 2 === 0 ? '-1.5deg' : '1.5deg'}`}>
+            <svg
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M4 12.5l5 5L20 6.5"></path>
+            </svg>
+            {skill}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="actions" data-reveal>
+      <a class="button button--primary" href={site.cv} download>
+        Descargar CV
+        <span aria-hidden="true">↓</span>
+      </a>
+      <a class="button button--secondary" href={experienceHref}>
+        Ver mi experiencia
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .about {
+    display: grid;
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  .about__side {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .about__portrait {
+    position: relative;
+    margin: 0 var(--space-3) 0 0;
+  }
+
+  .about__portrait img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    max-height: 520px;
+    object-fit: cover;
+    object-position: top;
+    border: var(--border-width) solid var(--color-outline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-hard-lg);
+  }
+
+  .about__badge {
+    position: absolute;
+    top: var(--space-4);
+    right: calc(var(--space-3) * -1);
+    padding: var(--space-2) var(--space-4);
+    border: var(--border-width) solid var(--color-outline);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    box-shadow: var(--shadow-hard-sm);
+    color: var(--color-bg);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    transform: rotate(5deg);
+  }
+
+  .about__facts {
+    padding: var(--space-5) var(--space-5);
+    border: var(--border-width) solid var(--color-outline-alt);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: 6px 6px 0 var(--color-shadow-alt);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 2;
+  }
+
+  .about__facts-title {
+    font-weight: 700;
+  }
+
+  .about__facts-title span {
+    color: var(--color-accent);
+  }
+
+  .about__facts-list {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 var(--space-5);
+    margin: 0;
+  }
+
+  .about__fact {
+    display: contents;
+  }
+
+  .about__fact dt {
+    color: var(--color-primary);
+  }
+
+  .about__fact dd {
+    margin: 0;
+  }
+
+  .about__body {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .about__statement {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+
+  .about__mark {
+    padding-inline: 0.1em;
+    background: linear-gradient(var(--color-highlight), var(--color-highlight)) no-repeat left 92% /
+      100% 58%;
+    color: var(--color-on-highlight);
+    box-decoration-break: clone;
+    animation: mark-draw 900ms var(--ease-out) calc(var(--i) * 300ms + 500ms) both;
+  }
+
+  @keyframes mark-draw {
+    from {
+      background-size: 0% 58%;
+    }
+    to {
+      background-size: 100% 58%;
+    }
+  }
+
+  .about__text {
+    max-width: 62ch;
+    font-size: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .about__skills {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .about__skills-title {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .about__skills-list {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .about__skill {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) 1.125rem;
+    line-height: 1.2;
+    border: var(--border-width) solid var(--color-text);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-hard-sm);
+    font-size: 1.125rem;
+    font-weight: 800;
+    transform: rotate(var(--tilt));
+    transition: transform var(--duration-base) var(--ease-spring);
+  }
+
+  .about__skill:nth-child(2),
+  .about__skill:nth-child(3) {
+    box-shadow: 5px 5px 0 var(--color-shadow-alt);
+  }
+
+  .about__skill:hover {
+    transform: rotate(0deg) translateY(-4px);
+  }
+
+  .about__skill svg {
+    flex: none;
+    color: var(--color-accent);
+  }
+
+  @media (min-width: 640px) {
+    .about__skills-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 960px) {
+    .about {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 3.5rem;
+    }
+
+    .about__side {
+      position: sticky;
+      top: calc(var(--header-height) + var(--space-5));
+    }
+  }
+</style>

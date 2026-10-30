@@ -6,17 +6,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="page">
     <div class="container">
       <div class="page__header">
-        <p class="page__eyebrow">// 404 — Error</p>
+        <p class="page__eyebrow">Error 404</p>
         <h1 class="page__title">Esta página no existe</h1>
         <p class="page__lead">
           Puede que el enlace esté mal escrito o que la página haya cambiado de sitio.
         </p>
       </div>
-
-      <figure class="error-code">
-        <pre><code>GET /ruta-no-existe → 404</code></pre>
-        <figcaption class="error-code__caption">Respuesta de la API del servidor</figcaption>
-      </figure>
 
       <div class="actions">
         <a class="button button--primary" href="/">
@@ -29,34 +24,3 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .error-code {
-    margin: var(--space-6) 0;
-    overflow: hidden;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-lg);
-    background: var(--color-code-bg);
-    color: var(--color-code-text);
-  }
-
-  .error-code pre {
-    margin: 0;
-    padding: var(--space-4);
-    overflow-x: auto;
-    color: var(--color-code-text);
-    font-family: var(--font-mono);
-    font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
-    line-height: 1.6;
-  }
-
-  .error-code__caption {
-    padding: var(--space-2) var(--space-3);
-    border-top: 1px solid rgb(255 255 255 / 10%);
-    color: var(--color-code-muted);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-</style>

@@ -20,7 +20,7 @@ function sync(theme: Theme, announce = false): void {
   }
 
   if (themeColor) {
-    themeColor.content = isDark ? '#11111B' : '#F8F7FC';
+    themeColor.content = isDark ? '#0B0A12' : '#F8F7FC';
   }
 
   if (announce && liveRegion) {

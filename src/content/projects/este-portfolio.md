@@ -33,11 +33,13 @@ Tenía que ser estático y gratuito de alojar; cargar rápido en móvil; cumplir
 
 Elegí Astro por su salida estática, las Content Collections y la optimización de imágenes. El diseño usa CSS nativo con custom properties en lugar de Tailwind: el sitio es pequeño y quería que cada token tuviera una razón. El tema claro/oscuro se resuelve con un script bloqueante en el head para evitar FOUC y un botón con estado accesible.
 
+El estilo visual es neobrutalista con un guiño a las terminales: bordes gruesos, sombras duras, tipografía Bricolage Grotesque y Space Mono autoalojadas, y un efecto CRT y de glitch en el titular. Para las animaciones de entrada y de scroll usé GSAP, la única dependencia de cliente: el resto del movimiento (glitch, cintas, hover) es CSS puro. Todo se anima solo con `transform`, para que el contraste del texto no cambie en ningún fotograma, y con `prefers-reduced-motion` no se registra ninguna animación.
+
 Los proyectos se validan con Zod y un script que exige seis secciones. Un caso incompleto rompe el build, para que no se publique una tarjeta vacía. Las pruebas son Playwright y axe sobre el build de producción, en móvil y escritorio.
 
 ## Resultado
 
-El sitio se sirve como HTML estático y genera las imágenes en el build. El CSS pesa menos de 4 KB gzip y no se envía ningún framework de cliente. Las pruebas cubren rutas, 404, tema, menú móvil y accesibilidad en ambos temas. El despliegue está preparado para Vercel con el dominio provisional; los previews por pull request se activarán cuando se conecte el repositorio.
+El sitio se sirve como HTML estático y genera las imágenes en el build. El CSS pesa 7 KB gzip. El JavaScript de cliente pesa 43 KB gzip, casi todo GSAP, y la página se ve completa sin él. Las pruebas cubren rutas, 404, tema, menú móvil y accesibilidad en ambos temas. El despliegue está preparado para Vercel con previews por pull request.
 
 ## Qué haría después
 

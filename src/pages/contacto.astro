@@ -1,7 +1,6 @@
 ---
 import { site } from '../data/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CopyEmail from '../components/CopyEmail.astro';
 ---
 
 <BaseLayout
@@ -11,7 +10,7 @@ import CopyEmail from '../components/CopyEmail.astro';
   <section class="page">
     <div class="container">
       <div class="page__header">
-        <p class="page__eyebrow">// 03 — Contacto</p>
+        <p class="page__eyebrow">[4] Contacto</p>
         <h1 class="page__title">Contacto</h1>
         <p class="page__lead">
           La forma más rápida es un email. Si prefieres, también estoy en LinkedIn y GitHub.
@@ -19,19 +18,14 @@ import CopyEmail from '../components/CopyEmail.astro';
       </div>
 
       <div class="contact-grid">
-        <div class="contact-block contact-block--email">
-          <p class="mono-label">// email</p>
-          <h2 class="contact-block__title">Escríbeme</h2>
-          <p class="contact-block__text">
-            {site.email}
-            <br />
-            {site.availability} · Remoto
+        <div class="contact-block">
+          <h2 class="contact-block__title">Email</h2>
+          <p>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
           </p>
-          <CopyEmail />
         </div>
 
         <div class="contact-block">
-          <p class="mono-label">// redes</p>
           <h2 class="contact-block__title">Redes</h2>
           <ul class="contact-block__list">
             <li>
@@ -44,9 +38,8 @@ import CopyEmail from '../components/CopyEmail.astro';
         </div>
 
         <div class="contact-block">
-          <p class="mono-label">// dónde</p>
-          <h2 class="contact-block__title">Ubicación</h2>
-          <p class="contact-block__text">
+          <h2 class="contact-block__title">Dónde estoy</h2>
+          <p>
             {site.location}
             <br />
             {site.availability} · Remoto
@@ -64,23 +57,21 @@ import CopyEmail from '../components/CopyEmail.astro';
   }
 
   .contact-block {
-    display: grid;
-    gap: var(--space-2);
-    align-content: start;
-    min-width: 0;
     padding: var(--space-5);
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-outline);
     border-radius: var(--radius-lg);
     background: var(--color-surface);
+    box-shadow: var(--shadow-hard);
+    transition: transform var(--duration-base) var(--ease-spring);
+  }
+
+  .contact-block:hover {
+    transform: translateY(-4px) rotate(-0.5deg);
   }
 
   .contact-block__title {
+    margin-bottom: var(--space-3);
     font-size: var(--text-xl);
-  }
-
-  .contact-block__text {
-    color: var(--color-text-muted);
-    font-size: var(--text-sm);
   }
 
   .contact-block__list {
@@ -93,8 +84,8 @@ import CopyEmail from '../components/CopyEmail.astro';
 
   @media (min-width: 768px) {
     .contact-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: var(--space-6);
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-7);
     }
   }
 </style>

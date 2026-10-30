@@ -14,7 +14,7 @@ const projects = sortProjects(await getCollection('projects'));
   <section class="page">
     <div class="container">
       <div class="page__header">
-        <p class="page__eyebrow">// 01 — Proyectos</p>
+        <p class="page__eyebrow">[1] Trabajo</p>
         <h1 class="page__title">Proyectos</h1>
         <p class="page__lead">
           Casos de estudio con contexto, restricciones, decisiones y resultado. Sin capturas
@@ -51,6 +51,8 @@ const projects = sortProjects(await getCollection('projects'));
   .project-list__note {
     margin-top: var(--space-6);
     color: var(--color-text-muted);
+    font-family: var(--font-mono);
     font-size: var(--text-sm);
+    font-weight: 700;
   }
 </style>

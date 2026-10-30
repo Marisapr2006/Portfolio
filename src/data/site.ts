@@ -12,5 +12,6 @@ export const site = {
 export const navigation = [
   { href: '/proyectos/', label: 'Proyectos' },
   { href: '/sobre-mi/', label: 'Sobre mí' },
+  { href: '/sobre-mi/#experiencia', label: 'Experiencia' },
   { href: '/contacto/', label: 'Contacto' },
 ] as const;

@@ -44,6 +44,18 @@ This table is a quick index for agents that only read `AGENTS.md`. The `SKILL.md
 | `performance-optimization` | Performance requirements exist, a regression is suspected, Core Web Vitals are poor, or profiling revealed a bottleneck. Measure before optimizing. |
 | `git-workflow-and-versioning` | Making any code change: committing, branching, resolving conflicts, cutting a release, choosing a version bump, tagging, or writing a changelog. |
 | `documentation-and-adrs` | Making an architectural decision, changing a public API, shipping a feature, or recording context that future engineers and agents will need. |
+| `seo-audit` | Auditing metadata, canonical URLs, sitemap, structured data, indexing, or Core Web Vitals. |
+| `design-taste-frontend` | Designing or restyling pages so they do not look templated. Heavy (39 files); palette and typography changes still require asking first (Spec §13). |
+| `frontend-design` | Choosing an aesthetic direction, typography and composition for new or reshaped UI. |
+| `copywriting` | Writing or rewriting page copy (hero, Sobre mí, case studies). Copy stays in Spanish. |
+| `emil-design-eng` | UI polish, component details and animation decisions. |
+| `animate` | Adding motion from scratch. Always honor `prefers-reduced-motion`. |
+| `review-animations` | Reviewing existing motion code. |
+| `animation-performance` | Animations that drop frames, or choosing which properties to animate. |
+| `playwright-cli` | Automating a browser or working with the Playwright tests in `tests/e2e/`. |
+| `break-ui` | Stress-testing a component with worst-case data (long names, empty lists, emoji). |
+| `mobile-native` | Touch behavior, the `100vh` bug, tap highlights and notch safe areas on phones. |
+| `launch` | Pre-launch QA and go-live checklist before publishing the site. |
 
 ### Typical workflows
 

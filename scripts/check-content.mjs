@@ -12,30 +12,10 @@ const requiredSections = [
 ];
 const maxSummaryLength = 160;
 
-async function listMarkdownFiles(dir) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files = [];
-
-  for (const entry of entries) {
-    const entryPath = join(dir, entry.name);
-
-    if (entry.isDirectory()) {
-      files.push(...(await listMarkdownFiles(entryPath)));
-      continue;
-    }
-
-    if (entry.isFile() && entry.name.endsWith('.md')) {
-      files.push(entryPath);
-    }
-  }
-
-  return files;
-}
-
 let files = [];
 
 try {
-  files = await listMarkdownFiles(projectsDir);
+  files = (await readdir(projectsDir)).filter((file) => file.endsWith('.md'));
 } catch (error) {
   if (error.code === 'ENOENT') {
     console.log(`check-content: ${projectsDir} does not exist yet; nothing to validate.`);
@@ -52,7 +32,8 @@ if (files.length === 0) {
 const errors = [];
 
 for (const file of files) {
-  const source = await readFile(file, 'utf8');
+  const path = join(projectsDir, file);
+  const source = await readFile(path, 'utf8');
   const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
 
   if (!frontmatter) {
