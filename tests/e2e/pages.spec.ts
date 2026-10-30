@@ -18,6 +18,23 @@ for (const route of routes) {
   });
 }
 
+for (const route of routes) {
+  test(`${route.path} no registra avisos ni errores en consola`, async ({ page }) => {
+    const messages: string[] = [];
+
+    page.on('console', (message) => {
+      if (message.type() === 'warning' || message.type() === 'error') {
+        messages.push(`${message.type()}: ${message.text()}`);
+      }
+    });
+    page.on('pageerror', (error) => messages.push(`pageerror: ${error.message}`));
+
+    await page.goto(route.path, { waitUntil: 'networkidle' });
+
+    expect(messages).toEqual([]);
+  });
+}
+
 test('la página 404 responde con 404 y enlace al inicio', async ({ page }) => {
   const response = await page.goto('/esta-pagina-no-existe/');
 

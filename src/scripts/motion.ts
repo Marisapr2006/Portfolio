@@ -55,12 +55,17 @@ media.add('(prefers-reduced-motion: no-preference)', () => {
     });
   }
 
-  // Scroll reveals
+  // Scroll reveals. Pages without any [data-reveal] skip this block entirely:
+  // gsap.set() on an empty target list logs a "GSAP target not found" warning.
   const reveals = gsap.utils.toArray<HTMLElement>('[data-reveal]');
-  gsap.set(reveals, { y: 56, scale: 0.97 });
-  const revealObserver = onceVisible(reveals, (element) => {
-    gsap.to(element, { y: 0, scale: 1, duration: 0.9, ease, clearProps: 'transform' });
-  });
+  let revealObserver: IntersectionObserver | null = null;
+
+  if (reveals.length > 0) {
+    gsap.set(reveals, { y: 56, scale: 0.97 });
+    revealObserver = onceVisible(reveals, (element) => {
+      gsap.to(element, { y: 0, scale: 1, duration: 0.9, ease, clearProps: 'transform' });
+    });
+  }
 
   const nodeObservers: IntersectionObserver[] = [];
 
@@ -86,21 +91,24 @@ media.add('(prefers-reduced-motion: no-preference)', () => {
     }
 
     const nodes = Array.from(timeline.querySelectorAll<HTMLElement>('.timeline__node'));
-    // Like gsap.from(): the end state is whatever the CSS says (a 45deg diamond).
-    const restingRotation = new Map(
-      nodes.map((node) => [node, gsap.getProperty(node, 'rotation')]),
-    );
-    gsap.set(nodes, { scale: 0, rotation: 225 });
-    nodeObservers.push(
-      onceVisible(nodes, (node) => {
-        gsap.to(node, {
-          scale: 1,
-          rotation: restingRotation.get(node),
-          duration: 0.7,
-          ease: 'back.out(2)',
-        });
-      }),
-    );
+
+    if (nodes.length > 0) {
+      // Like gsap.from(): the end state is whatever the CSS says (a 45deg diamond).
+      const restingRotation = new Map(
+        nodes.map((node) => [node, gsap.getProperty(node, 'rotation')]),
+      );
+      gsap.set(nodes, { scale: 0, rotation: 225 });
+      nodeObservers.push(
+        onceVisible(nodes, (node) => {
+          gsap.to(node, {
+            scale: 1,
+            rotation: restingRotation.get(node),
+            duration: 0.7,
+            ease: 'back.out(2)',
+          });
+        }),
+      );
+    }
   });
 
   // Marquees: same loop as the CSS fallback, but they speed up with the scroll.
@@ -127,7 +135,7 @@ media.add('(prefers-reduced-motion: no-preference)', () => {
   }
 
   return () => {
-    revealObserver.disconnect();
+    revealObserver?.disconnect();
     nodeObservers.forEach((observer) => observer.disconnect());
     tweens.forEach((tween) => tween.kill());
   };
