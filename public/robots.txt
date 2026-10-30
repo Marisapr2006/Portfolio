@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://marisa-portfolio.vercel.app/sitemap-index.xml
+Sitemap: https://marisa-portfolio-marisapenarey-2138s-projects.vercel.app/sitemap-index.xml

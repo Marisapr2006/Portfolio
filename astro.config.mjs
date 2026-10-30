@@ -2,9 +2,11 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  // Vercel project name: marisa-portfolio. This is the single source of truth
-  // for canonical URLs and the sitemap, and must match public/robots.txt.
-  site: 'https://marisa-portfolio.vercel.app',
+  // Vercel project name: marisa-portfolio. The plain marisa-portfolio.vercel.app
+  // subdomain belongs to another account, so Vercel assigned this production
+  // domain. It is the single source of truth for canonical URLs and the
+  // sitemap, and must match public/robots.txt.
+  site: 'https://marisa-portfolio-marisapenarey-2138s-projects.vercel.app',
   output: 'static',
   trailingSlash: 'always',
   integrations: [sitemap()],
