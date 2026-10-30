@@ -7,7 +7,7 @@ resultado, en lugar de una galería de tarjetas.
 Construido con Astro, CSS nativo, TypeScript mínimo y contenido en Markdown. Sin backend, sin
 framework de UI y sin cookies.
 
-- **URL:** <https://marisapena.vercel.app/> (provisional; ver [Despliegue](#despliegue))
+- **URL:** <https://marisa-portfolio.vercel.app/> (ver [Despliegue](#despliegue))
 - **Especificación:** [`docs/Spec.md`](docs/Spec.md) es la fuente de verdad del producto y de las
   decisiones técnicas.
 - **Diseño:** [`docs/Design.md`](docs/Design.md) recoge la paleta y la dirección visual.
@@ -196,13 +196,16 @@ comprobación concreta.
 
 El sitio es estático y no necesita adaptador de Astro.
 
-1. Conecta el repositorio a Vercel con el preset **Astro**.
+1. Conecta el repositorio a Vercel con el preset **Astro** y el nombre de proyecto
+   **`marisa-portfolio`**.
 2. Build: `npm run build`. Output: `dist`.
 3. Producción desde `main`; cada pull request genera una preview.
 
-`site` en [`astro.config.mjs`](astro.config.mjs) es la fuente de verdad de las URLs canónicas y del
-sitemap, y debe coincidir con el `Sitemap:` de [`public/robots.txt`](public/robots.txt). Al pasar a
-un dominio propio hay que cambiar ambos valores y añadir el dominio en Vercel.
+El nombre del proyecto determina la URL pública: `https://marisa-portfolio.vercel.app`. `site` en
+[`astro.config.mjs`](astro.config.mjs) es la fuente de verdad de las URLs canónicas y del sitemap, y
+debe coincidir con el `Sitemap:` de [`public/robots.txt`](public/robots.txt). Si el subdominio ya
+estuviera ocupado, Vercel asignará un sufijo y habrá que actualizar ambos valores; al pasar a un
+dominio propio, igual.
 
 `vercel.json` fija `trailingSlash: true`, añade cabeceras de seguridad y cache inmutable para
 `/fonts/`.

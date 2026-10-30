@@ -28,7 +28,7 @@ Portfolio personal estático de Marisa Peña Rey (desarrolladora full-stack juni
 - **Layouts:** `BaseLayout` se encarga de todo el `<head>`: URL canónica desde `Astro.site`, etiquetas OG/Twitter, JSON-LD de Person, precarga de la fuente y un script **inline** previo al primer pintado que fija `data-theme` a partir de `localStorage['mp-theme']` o de la preferencia del sistema (evita el parpadeo del tema). `ProjectLayout` lo envuelve para los casos de estudio.
 - **Tema:** claro/oscuro mediante `data-theme` en `<html>`; `src/scripts/theme.ts` alimenta `ThemeToggle` y `src/scripts/mobile-nav.ts` alimenta `MobileNav`. El JS de cliente es vanilla; no hay framework de UI. `src/scripts/motion.ts` usa GSAP + ScrollTrigger solo como mejora progresiva (solo `transform`, nada se registra con `prefers-reduced-motion`).
 - **Datos:** los datos personales, enlaces y navegación viven en `src/data/site.ts`; `projects.ts` contiene las etiquetas de estado y la ordenación por `order`; `stack.ts` y `process.ts` alimentan las secciones de sobre mí e inicio.
-- **URL del sitio:** `site` en `astro.config.mjs` es provisional (`marisapena.vercel.app`) y debe coincidir con `public/robots.txt`; cambia ambos cuando se defina el dominio real.
+- **URL del sitio:** `site` en `astro.config.mjs` apunta al proyecto de Vercel `marisa-portfolio` (`https://marisa-portfolio.vercel.app`) y debe coincidir con `public/robots.txt`; cambia ambos cuando se defina el dominio propio.
 - **CV:** `docs/CV_Marisa.pdf` es el original; la copia publicada es `public/cv/marisa-pena-rey-cv.pdf`. Enlázalo solo cuando esté actualizado.
 
 ## Convenciones

@@ -20,7 +20,7 @@ const {
   ogType = 'website',
 } = Astro.props;
 
-const siteUrl = Astro.site ?? new URL('https://marisapena.vercel.app/');
+const siteUrl = Astro.site ?? new URL('https://marisa-portfolio.vercel.app/');
 const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.role}`;
 const canonical = new URL(Astro.url.pathname, siteUrl);
 

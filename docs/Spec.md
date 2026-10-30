@@ -700,7 +700,7 @@ Decisiones tomadas al ejecutar la especificación:
 
 - Versiones fijadas: Astro **7.4.4**, `@astrojs/sitemap` **3.7.4**, TypeScript **6.0.3** (el peer de `@astrojs/check` admite `^5 || ^6`, no TS 7), Prettier **3.9.10**, Playwright **1.64.1** y axe **4.14.0**.
 - `trailingSlash: 'always'` se configura en `astro.config.mjs`; `vercel.json` lo replica y añade cabeceras de seguridad (`X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`) y cache inmutable para `/fonts/`.
-- URL canónica provisional: `https://marisapena.vercel.app`. Se actualizará en `astro.config.mjs` y `public/robots.txt` cuando se confirme el proyecto de Vercel o el dominio propio.
+- URL canónica: `https://marisa-portfolio.vercel.app`, correspondiente al proyecto de Vercel `marisa-portfolio`. Vive en `astro.config.mjs` y debe coincidir con `public/robots.txt`; al pasar a un dominio propio se cambian ambos valores y se añade el dominio en Vercel.
 - `docs/Arquitecture.md` queda marcado como documento histórico.
 - Fuentes self-hosted en `public/fonts/` con licencia OFL incluida (ver Fase 2 para el cambio de familia).
 - CV copiado a `public/cv/marisa-pena-rey-cv.pdf` desde `docs/CV_Marisa.pdf`.
