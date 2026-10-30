@@ -1,23 +1,33 @@
 # Portfolio de Marisa Peña Rey
 
-Portfolio personal estático: casos de estudio, perfil y contacto para una desarrolladora web
-full-stack junior. Construido con Astro, CSS nativo y contenido en Markdown.
+Portfolio personal estático de una desarrolladora web full-stack junior. El sitio se plantea como
+un **dossier de ingeniería**: cada proyecto se cuenta con contexto, restricciones, decisiones y
+resultado, en lugar de una galería de tarjetas.
 
-- **Producción:** pendiente de confirmar el nombre del proyecto en Vercel.
-- **Especificación:** [`docs/Spec.md`](docs/Spec.md) es la fuente de verdad.
-- **Diseño:** [`docs/Design.md`](docs/Design.md) define la identidad técnica y la paleta.
+Construido con Astro, CSS nativo, TypeScript mínimo y contenido en Markdown. Sin backend, sin
+framework de UI y sin cookies.
+
+- **URL:** <https://marisapena.vercel.app/> (provisional; ver [Despliegue](#despliegue))
+- **Especificación:** [`docs/Spec.md`](docs/Spec.md) es la fuente de verdad del producto y de las
+  decisiones técnicas.
+- **Diseño:** [`docs/Design.md`](docs/Design.md) recoge la paleta y la dirección visual.
 
 ## Stack
 
-- Astro 7 con salida estática y Content Collections.
-- CSS nativo con custom properties; sin framework de UI.
-- TypeScript estricto y scripts de cliente en vanilla.
-- Playwright + axe para pruebas E2E y de accesibilidad.
-- Prettier para formato.
+| Pieza      | Decisión                                                                   |
+| ---------- | -------------------------------------------------------------------------- |
+| Framework  | Astro 7 con salida 100 % estática y Content Collections                    |
+| Estilos    | CSS nativo con custom properties (tokens); sin Tailwind ni framework de UI |
+| Contenido  | Markdown validado con Zod en build y con `scripts/check-content.mjs`       |
+| JavaScript | Islas vanilla (tema, menú móvil) + GSAP 3.15 solo para animación           |
+| Tipografía | Bricolage Grotesque variable y Space Mono, self-hosted en WOFF2 (OFL)      |
+| Pruebas    | Playwright en Chromium (móvil 390 px y escritorio 1440 px) + axe           |
+| Formato    | Prettier con `prettier-plugin-astro` y TypeScript estricto                 |
+| Despliegue | Vercel, preset Astro, salida `dist/`                                       |
 
 ## Requisitos
 
-- Node.js `>=22.23.4`
+- Node.js `>=22.23.4` (requisito de Astro 7)
 - npm `>=11`
 
 ## Puesta en marcha
@@ -27,70 +37,182 @@ npm ci
 npm run dev
 ```
 
-El servidor de desarrollo queda en <http://localhost:4321/>.
+El servidor de desarrollo queda en <http://localhost:4321/> y recarga en caliente al guardar.
 
-## Comandos
+Para revisar el build de producción:
 
-| Comando                 | Qué hace                                                                  |
-| ----------------------- | ------------------------------------------------------------------------- |
-| `npm run dev`           | Servidor de desarrollo en el puerto 4321.                                 |
-| `npm run build`         | Ejecuta la validación de contenido y genera el sitio estático en `dist/`. |
-| `npm run preview`       | Sirve el build de producción.                                             |
-| `npm run check`         | Comprueba tipos y plantillas con `astro check`.                           |
-| `npm run lint`          | Verifica el formato con Prettier.                                         |
-| `npm run format`        | Aplica Prettier.                                                          |
-| `npm run check:content` | Valida las secciones obligatorias de los casos.                           |
-| `npm test`              | Compila y ejecuta Playwright.                                             |
-| `npm run test:e2e`      | Ejecuta Playwright sobre un build ya existente.                           |
-| `npm run test:a11y`     | Ejecuta solo las pruebas de accesibilidad.                                |
-| `npm run verify`        | Puerta completa: check, lint, contenido y tests.                          |
+```bash
+npm run build
+npm run preview
+```
+
+## Scripts
+
+| Comando                 | Qué hace                                                      |
+| ----------------------- | ------------------------------------------------------------- |
+| `npm run dev`           | Servidor de desarrollo en el puerto 4321.                     |
+| `npm run build`         | Genera el sitio estático en `dist/`.                          |
+| `npm run preview`       | Sirve el build de producción en el puerto 4321.               |
+| `npm run check`         | `astro check`: tipos y plantillas.                            |
+| `npm run lint`          | Comprueba el formato con Prettier.                            |
+| `npm run format`        | Aplica Prettier.                                              |
+| `npm run check:content` | Valida las secciones obligatorias de los casos de estudio.    |
+| `npm test`              | Compila y ejecuta Playwright contra el build.                 |
+| `npm run test:e2e`      | Ejecuta Playwright sobre un `dist/` ya existente.             |
+| `npm run test:a11y`     | Ejecuta solo la suite de accesibilidad (axe).                 |
+| `npm run verify`        | Puerta completa: `check` + `lint` + `check:content` + `test`. |
+
+Un único test:
+
+```bash
+npx playwright test tests/e2e/theme.spec.ts
+npx playwright test -g "el tema cambia" --project=mobile
+```
+
+## Rutas
+
+| Ruta                 | Contenido                                                           |
+| -------------------- | ------------------------------------------------------------------- |
+| `/`                  | Hero, trabajo seleccionado, sobre mí, experiencia, proceso y stack. |
+| `/proyectos/`        | Índice de todos los casos publicados, ordenados por `order`.        |
+| `/proyectos/<slug>/` | Caso de estudio con metadatos, portada, cuerpo y siguiente caso.    |
+| `/sobre-mi/`         | Bio, datos rápidos, competencias y experiencia.                     |
+| `/contacto/`         | Email copiable, LinkedIn, GitHub, ubicación y disponibilidad.       |
+| `/404`               | Página no encontrada, con enlaces de vuelta.                        |
+
+Las URLs usan barra final canónica (`trailingSlash: 'always'`), replicada en `vercel.json`.
 
 ## Estructura
 
 ```text
-public/                 CV, favicon, robots.txt y OG
-scripts/                Validación de contenido
-src/components/         Header, Footer, Hero, ProfileCard, ProjectCard, StackGrid, ProcessGrid, CopyEmail, ThemeToggle, MobileNav
-src/data/               Datos del sitio y navegación
-src/layouts/            BaseLayout, ProjectLayout
-src/pages/              Rutas
-src/scripts/            Tema, menú móvil y copiar email
-src/styles/             Tokens, base y utilidades
-tests/e2e/              Playwright + axe
+.
+├─ public/
+│  ├─ cv/marisa-pena-rey-cv.pdf        # CV descargable
+│  ├─ fonts/                           # Bricolage Grotesque y Space Mono (WOFF2 + OFL)
+│  ├─ favicon.svg
+│  └─ robots.txt                       # debe apuntar al dominio de astro.config.mjs
+├─ scripts/
+│  └─ check-content.mjs                # valida las seis secciones de cada caso
+├─ src/
+│  ├─ assets/
+│  │  ├─ profile/                      # foto de perfil, optimizada por Astro
+│  │  └─ projects/<slug>/cover.png     # portadas, optimizadas en build
+│  ├─ components/                      # Header, Hero, ProjectCard, Marquee, ToolsBento…
+│  ├─ content/projects/*.md            # un archivo por caso de estudio
+│  ├─ content.config.ts                # colección y esquema Zod
+│  ├─ data/                            # site, projects, stack, process, about, experience
+│  ├─ layouts/                         # BaseLayout (head, tema, JSON-LD) y ProjectLayout
+│  ├─ pages/                           # rutas
+│  ├─ scripts/                         # theme.ts, mobile-nav.ts, motion.ts (GSAP)
+│  └─ styles/                          # tokens.css, base.css, utilities.css
+├─ tests/e2e/                          # pages, theme y a11y (Playwright + axe)
+├─ docs/                               # Spec, Design, AGENTS y material de origen
+├─ astro.config.mjs                    # site, salida estática y sitemap
+├─ playwright.config.ts
+└─ vercel.json                         # trailing slash y cabeceras de seguridad
 ```
 
-## Contenido
+Reglas de la casa:
 
-- Los datos personales y los enlaces viven en `src/data/site.ts`.
-- Los proyectos viven como Markdown en `src/content/projects/`. El esquema de
-  `src/content.config.ts` valida título, resumen, año, rol, estado, stack, portada y enlaces.
-- Cada caso debe incluir, en este orden, las secciones `## Contexto`, `## El problema`,
-  `## Restricciones`, `## Decisiones`, `## Resultado` y `## Qué haría después`.
+- Las páginas componen layouts y componentes; no llevan estilos propios.
+- Colores, espacios y tipografías se declaran solo en `src/styles/tokens.css`.
+- Los textos de los proyectos viven en Markdown, nunca en componentes.
+- Las imágenes de proyecto van a `src/assets/` para que Astro las optimice; lo estático (CV,
+  favicon, fuentes) va a `public/`.
 
-### Añadir un proyecto
+## Añadir un proyecto
 
-1. Crea `src/content/projects/<slug>.md` y añade el frontmatter que exige el esquema.
-2. Guarda la portada en `src/assets/projects/<slug>/cover.png` y referénciala con una ruta
-   relativa desde el Markdown.
-3. Escribe las seis secciones y ejecuta `npm run check:content`.
-4. Ejecuta `npm test` para comprobar rutas, enlaces, tema y accesibilidad.
+1. Crea `src/content/projects/<slug>.md` con el frontmatter que exige
+   [`src/content.config.ts`](src/content.config.ts): `title`, `summary` (40–160 caracteres),
+   `year`, `role`, `status` (`live` | `repo` | `case-study`), `stack`, `cover`, `gallery`,
+   `repo`/`demo`/`video`, `featured`, `order` y `confidential`.
+2. Guarda la portada en `src/assets/projects/<slug>/cover.png` y referénciala desde el Markdown con
+   una ruta relativa, para que Astro la valide y la optimice.
+3. Escribe estas seis secciones, en este orden:
 
-El CV publicado está en `public/cv/marisa-pena-rey-cv.pdf`. Se copia desde `docs/CV_Marisa.pdf`
-cuando se actualice.
+   ```md
+   ## Contexto
+
+   ## El problema
+
+   ## Restricciones
+
+   ## Decisiones
+
+   ## Resultado
+
+   ## Qué haría después
+   ```
+
+4. Ejecuta `npm run check:content` para validar el Markdown y `npm test` para comprobar rutas,
+   enlaces, tema y accesibilidad.
+
+Si el caso es confidencial, usa `confidential: true`: se sustituye el nombre del cliente y se
+ocultan los enlaces privados.
+
+## Tema y movimiento
+
+- Tema claro/oscuro con `data-theme` en `<html>`. Un script inline en el `<head>` lo fija antes del
+  primer pintado (lee `localStorage['mp-theme']` y, si no existe, `prefers-color-scheme`), así que
+  no hay parpadeo.
+- El toggle es un `<button>` con `aria-pressed` y nombre accesible; la preferencia persiste.
+- GSAP + ScrollTrigger se cargan como mejora progresiva en `src/scripts/motion.ts`. Solo se anima
+  `transform`, el contenido es visible sin JavaScript y con `prefers-reduced-motion: reduce` no se
+  registra ninguna animación.
+
+## Accesibilidad y rendimiento
+
+Objetivo **WCAG 2.2 AA** en ambos temas:
+
+- Enlace «Saltar al contenido», landmarks correctos y un solo `<h1>` por página.
+- Navegación completa por teclado, menú móvil que cierra con Escape y devuelve el foco.
+- Foco visible con contraste ≥ 3:1, áreas táctiles de 24×24 px y contraste de texto ≥ 4.5:1.
+- axe sin violaciones `serious` ni `critical` en las cinco páginas, en claro y oscuro.
+- Sin scroll horizontal a 360 px.
+
+Presupuestos de rendimiento en móvil: JS inicial ≤ 20 KB gzip, CSS ≤ 25 KB gzip, LCP < 2 s y
+CLS < 0.05. Se consiguen con cero frameworks de UI, fuentes self-hosted precargadas con
+`font-display: swap`, imágenes AVIF/WebP con `srcset` y sin scripts de terceros.
 
 ## Despliegue
 
-El sitio es 100 % estático y no necesita adaptador de Astro.
+El sitio es estático y no necesita adaptador de Astro.
 
-1. Conectar el repositorio a Vercel con el preset **Astro**.
+1. Conecta el repositorio a Vercel con el preset **Astro**.
 2. Build: `npm run build`. Output: `dist`.
 3. Producción desde `main`; cada pull request genera una preview.
 
-La URL canónica se define en `astro.config.mjs` (`site`) y debe coincidir con la de
-`public/robots.txt`. Cuando haya dominio propio, se cambian ambos valores y se añade el dominio en
-Vercel.
+`site` en [`astro.config.mjs`](astro.config.mjs) es la fuente de verdad de las URLs canónicas y del
+sitemap, y debe coincidir con el `Sitemap:` de [`public/robots.txt`](public/robots.txt). Al pasar a
+un dominio propio hay que cambiar ambos valores y añadir el dominio en Vercel.
 
-## Accesibilidad
+`vercel.json` fija `trailingSlash: true`, añade cabeceras de seguridad y cache inmutable para
+`/fonts/`.
 
-Objetivo WCAG 2.2 AA: navegación por teclado, foco visible, contraste verificado, `prefers-reduced-motion`
-respetado y axe sin violaciones graves en tema claro y oscuro.
+## Documentación
+
+| Documento                                      | Para qué sirve                                                    |
+| ---------------------------------------------- | ----------------------------------------------------------------- |
+| [`docs/Spec.md`](docs/Spec.md)                 | Fuente de verdad: alcance, stack, contenido, a11y, SEO y pruebas. |
+| [`docs/Design.md`](docs/Design.md)             | Paleta, tipografía y sistema visual.                              |
+| [`docs/AGENTS.md`](docs/AGENTS.md)             | Guía para agentes: estructura, comandos y catálogo de skills.     |
+| [`docs/Arquitecture.md`](docs/Arquitecture.md) | Plan histórico (Laravel/MySQL); ya no aplica al portfolio.        |
+| [`CLAUDE.md`](CLAUDE.md)                       | Contexto resumido para Claude Code.                               |
+
+## Skills para agentes
+
+El repositorio incluye una colección portátil de [Agent Skills](https://agentskills.io) en
+`.agents/skills/` (canónica) y `.claude/skills/` (espejo idéntico). Cada skill es una carpeta con un
+`SKILL.md`. Si no sabes cuál aplica, empieza por
+[`.agents/skills/using-agent-skills/SKILL.md`](.agents/skills/using-agent-skills/SKILL.md).
+
+Tras editar una skill, copia `.agents/skills/` sobre `.claude/skills/` para mantener el espejo.
+
+## Contacto
+
+- Email: <marisapenarey@gmail.com>
+- LinkedIn: <https://www.linkedin.com/in/marisa-peña-rey-05508a365/>
+- GitHub: <https://github.com/Marisapr2006>
+
+Las fuentes incluidas en `public/fonts/` se distribuyen bajo la SIL Open Font License (ver
+`public/fonts/OFL.txt`).
