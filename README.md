@@ -174,6 +174,24 @@ Presupuestos de rendimiento en móvil: JS inicial ≤ 20 KB gzip, CSS ≤ 25 KB 
 CLS < 0.05. Se consiguen con cero frameworks de UI, fuentes self-hosted precargadas con
 `font-display: swap`, imágenes AVIF/WebP con `srcset` y sin scripts de terceros.
 
+## Integración continua
+
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) se ejecuta en cada push a `main` y en cada
+pull request, con Node 24 y Chromium:
+
+```bash
+npm ci
+npm run check
+npm run lint
+npm run check:content
+npm run build
+npx playwright install --with-deps chromium
+npm run test:e2e
+```
+
+Es la misma puerta que `npm run verify`, pero separada en pasos para que el fallo señale la
+comprobación concreta.
+
 ## Despliegue
 
 El sitio es estático y no necesita adaptador de Astro.
